@@ -1,0 +1,14 @@
+{
+  "name": "nounoclock-monorepo",
+  "version": "1.0.0",
+  "main": "index.js",
+  "author": "deployer",
+  "license": "MIT",
+  "private": true,
+  "workspaces": [
+    "packages/*"
+  ],
+  "engines": {
+    "node": "16.16.0"
+  }
+}
