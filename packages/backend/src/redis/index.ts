@@ -1,0 +1,12 @@
+import { createClient } from "redis";
+import { log } from "../utils";
+
+export const client = createClient({
+  url: process.env.REDIS_URL,
+});
+
+client.connect();
+
+client.on("connected", () => {
+  console.log("CONNECTED");
+});

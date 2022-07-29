@@ -1,6 +1,9 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React from "react";
+import logo from "./logo.svg";
+import { io } from "socket.io-client";
+import "./App.css";
+
+const socket = io("ws://localhost:3333");
 
 function App() {
   return (
@@ -18,6 +21,16 @@ function App() {
         >
           Learn React
         </a>
+        <button
+          onClick={() => {
+            socket.emit("reaction", {
+              bidId: "0x12123-209.1",
+              reactionId: "2",
+            });
+          }}
+        >
+          REACT
+        </button>
       </header>
     </div>
   );
