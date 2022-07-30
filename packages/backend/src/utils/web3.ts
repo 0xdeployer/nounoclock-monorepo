@@ -1,14 +1,15 @@
 import Web3 from "web3";
+import { HttpProvider, WebsocketProvider } from "web3-core/types";
 import NounsAuctionHouseAbi from "../abi/NounsAuctionHouse.json";
 import NounTokenAbi from "../abi/NounToken.json";
 
-enum ContractNames {
-  NounsAuctionHouse = "NounsAuctionHouse",
+export enum ContractNames {
+  NounsAuctionHouseProxy = "NounsAuctionHouseProxy",
   NounToken = "NounToken",
 }
 
 const contractInfo: { [key in ContractNames]: any } = {
-  NounsAuctionHouse: [
+  NounsAuctionHouseProxy: [
     NounsAuctionHouseAbi,
     process.env.NOUN_AUCTION_HOUSE_PROXY,
   ],
@@ -21,14 +22,14 @@ export function getHttpProvider() {
   );
 }
 
-export function getContract(name: ContractNames) {
-  const web3 = getHttpProvider();
+export function getContract(name: ContractNames, _web3?: Web3) {
+  const web3 = _web3 ?? getHttpProvider();
   const [abi, address] = contractInfo[name];
   return new web3.eth.Contract(abi, address);
 }
 
 export async function getCurrentNounAuction() {
-  const contract = getContract(ContractNames.NounsAuctionHouse);
+  const contract = getContract(ContractNames.NounsAuctionHouseProxy);
   const auction = await contract.methods.auction().call();
   console.log(auction);
   return auction;
@@ -41,7 +42,7 @@ export async function getCurrentBlockTime() {
 }
 
 export async function getBidEventsForNoun(nounId: string) {
-  const contract = getContract(ContractNames.NounsAuctionHouse);
+  const contract = getContract(ContractNames.NounsAuctionHouseProxy);
   return contract.getPastEvents("AuctionBid", {
     filter: {
       nounId,

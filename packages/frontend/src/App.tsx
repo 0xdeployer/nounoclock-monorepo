@@ -1,37 +1,52 @@
-import React from "react";
-import logo from "./logo.svg";
+import { css } from "@emotion/react";
+import React, { useRef } from "react";
 import { io } from "socket.io-client";
-import "./App.css";
+import { Noun } from "./components/Noun";
+import logo from "./logo.svg";
+import { useGetCurrentAuction } from "./hooks/useGetCurrentAuction";
+import { Bids } from "./components/Bids";
 
 const socket = io("ws://localhost:3333");
 
+const styles = {
+  wrap: css({
+    padding: "25px 50px 25px 100px",
+    position: "relative",
+    maxWidth: "1400px",
+    margin: "auto",
+  }),
+  content: css({
+    display: "flex",
+    gap: "30px",
+  }),
+  logo: css({
+    width: "50px",
+    position: "absolute",
+    left: "25px",
+    transform: "translateY(-10px)",
+  }),
+};
+
 function App() {
+  const currentAuction = useGetCurrentAuction();
+  const nounContainerRef = useRef<HTMLDivElement>(null);
+  if (!currentAuction) {
+    return <>LOADING</>;
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-        <button
-          onClick={() => {
-            socket.emit("reaction", {
-              bidId: "0x12123-209.1",
-              reactionId: "2",
-            });
-          }}
-        >
-          REACT
-        </button>
-      </header>
+    <div css={styles.wrap}>
+      <img css={styles.logo} src={logo} />
+      <div css={styles.content}>
+        <Noun container={nounContainerRef} data={currentAuction} />
+        <div style={{ flex: 1 }}>
+          <Bids
+            nounContainer={nounContainerRef}
+            currentBidValue={currentAuction.auction.amount}
+            bids={currentAuction?.bids}
+          />
+        </div>
+      </div>
     </div>
   );
 }

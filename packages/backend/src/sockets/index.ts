@@ -3,7 +3,7 @@ import http from "http";
 
 let io: Server;
 
-export const sockets = (server: http.Server) => {
+export const sockets = (server?: http.Server) => {
   if (io) return io;
   io = new Server(server, {
     cors: {

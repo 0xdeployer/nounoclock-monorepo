@@ -18,3 +18,5 @@ export type NounStats = {
   glasses: StatWithName;
   background: StatWithColor;
 };
+
+export * from "./events";

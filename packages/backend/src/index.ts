@@ -1,10 +1,9 @@
 import "./env";
+import "./database";
 import express, { NextFunction, Request, Response } from "express";
 import { router } from "./routes";
 import bodyParser from "body-parser";
-import Web3 from "web3";
 import { sockets } from "./sockets";
-// import "./database";
 
 const app = express();
 app.use(bodyParser.json());
