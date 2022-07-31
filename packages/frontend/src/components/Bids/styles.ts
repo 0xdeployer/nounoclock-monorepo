@@ -8,8 +8,15 @@ export const styles = {
     minHeight: "150px",
     alignItems: "center",
   }),
+  track: css({
+    position: "relative",
+  }),
   bidsWrap: css({
-    transition: "opacity 200ms",
+    transition: "opacity 0.3s",
+    // transitionDelay: "100ms",
+    position: "relative",
+    willChange: "transform",
+    overflowY: "scroll",
   }),
   bidItemInner: css({
     display: "flex",
@@ -24,12 +31,17 @@ export const styles = {
   bidItemAvatar: css({
     marginRight: "5px",
   }),
-  infoWrap: css({
+  social: css({
     display: "flex",
     alignItems: "center",
     gap: "10px",
   }),
   prevBidsWrap: css({
     transform: "translateY(-150px)",
+  }),
+  info: css({
+    display: "flex",
+    flexDirection: "column",
+    gap: "10px",
   }),
 };

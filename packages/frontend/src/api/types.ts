@@ -1,6 +1,6 @@
 export type Bid = {
   returnValues: {
-    noundId: string;
+    nounId: string;
     sender: string;
     value: string;
     extended: false;

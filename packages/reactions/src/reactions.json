@@ -1,0 +1,26 @@
+[
+  {
+    "name": "bars",
+    "id": "1"
+  },
+  {
+    "name": "diamond",
+    "id": "2"
+  },
+  {
+    "name": "lightning",
+    "id": "3"
+  },
+  {
+    "name": "goat",
+    "id": "4"
+  },
+  {
+    "name": "bell",
+    "id": "5"
+  },
+  {
+    "name": "bomb",
+    "id": "6"
+  }
+]

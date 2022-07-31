@@ -7,7 +7,7 @@ import { Bids } from "./components/Bids";
 import { useConnectWs } from "./hooks/useConnectWs";
 import { useAppStore } from "./stores";
 
-const socket = io("ws://localhost:3333");
+export const socket = io("ws://localhost:3333");
 
 const styles = {
   wrap: css({
@@ -25,6 +25,16 @@ const styles = {
     position: "absolute",
     left: "25px",
     transform: "translateY(-10px)",
+  }),
+  gradient: css({
+    background:
+      "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(0,0,0,0) 50%)",
+    width: "100%",
+    height: "100%",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    pointerEvents: "none",
   }),
 };
 
@@ -47,12 +57,13 @@ function App() {
       <img css={styles.logo} src={logo} />
       <div css={styles.content}>
         <Noun container={nounContainerRef} data={currentAuction} />
-        <div style={{ flex: 1 }}>
+        <div style={{ flex: 1, position: "relative" }}>
           <Bids
             nounContainer={nounContainerRef}
             currentBidValue={currentAuction.auction.amount}
             bids={currentAuction?.bids}
           />
+          <div css={styles.gradient} />
         </div>
       </div>
     </div>

@@ -1,5 +1,6 @@
 import { css } from "@emotion/react";
 import React, { useRef, useState } from "react";
+import { useLocalStorage } from "../../../hooks";
 import { styles } from "./styles";
 
 type AvatarProps = {
@@ -8,23 +9,27 @@ type AvatarProps = {
   className?: string;
 };
 
-const cache: { [key: number]: any } = {};
+const LS_KEY = "AVATAR_CACHE";
 
 export function Avatar({ src, seed, className }: AvatarProps) {
-  const [srcFromState, updateSrc] = useState(src);
+  const [cache, setLs] = useLocalStorage(LS_KEY, {});
   const canvasRef = useRef<HTMLCanvasElement>(null);
   React.useEffect(() => {
     if (!src && seed) {
       const id = (parseInt(seed, 16) % 10000) + 1;
       const fn = async () => {
         let res: { matrix: number[][]; colors: [string, string, string] };
+
         if (cache[id]) {
           res = cache[id];
         } else {
           res = await fetch(
             `https://pxg-prod.herokuapp.com/metadata/${id}`
           ).then((res) => res.json());
-          cache[id] = res;
+          setLs((c: any) => ({
+            ...c,
+            [id]: res,
+          }));
         }
 
         if (canvasRef.current) {

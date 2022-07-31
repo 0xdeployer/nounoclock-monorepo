@@ -37,7 +37,6 @@ export function Bids({ nounContainer }: BidsProps) {
   const prevBids = useMemo(() => {
     return bids?.slice(0, bids.length - 1);
   }, [bids]);
-  console.log(prevBids);
   const prevCurrent = usePrevious<Bid | undefined>(currentBid);
   React.useEffect(() => {
     if (
@@ -60,67 +59,100 @@ export function Bids({ nounContainer }: BidsProps) {
       }, 500);
     }
   }, [bids, initialTransform, currentBid, prevCurrent]);
+
+  const prevBidsRef = useRef<HTMLDivElement>(null);
+  const currentBidsRef = useRef<HTMLDivElement>(null);
+  const bidsWrapRef = useRef<HTMLDivElement>(null);
+  const [trackHeight, updateTrackHeight] = useState<number | undefined>();
+  React.useLayoutEffect(() => {
+    let height = 0;
+    if (prevBidsRef.current) {
+      height += prevBidsRef.current.offsetHeight;
+    }
+    if (currentBidsRef.current) {
+      height += currentBidsRef.current.offsetHeight;
+    }
+    updateTrackHeight(height);
+  }, [bids]);
+
+  React.useEffect(() => {
+    if (trackHeight && bidsWrapRef.current) {
+      setTimeout(() => {
+        if (!bidsWrapRef.current) return;
+        bidsWrapRef.current.scrollTo(0, trackHeight);
+      }, 100);
+    }
+  }, [trackHeight]);
+
   if (!bids) return null;
   return (
     <div
+      ref={bidsWrapRef}
       css={styles.bidsWrap}
       style={{
         height: height ? `${height}px` : "auto",
-        position: "relative",
         opacity: height ? 1 : 0,
-        willChange: "transform",
       }}
     >
-      <CSSTransition
-        in={translatePrevBids}
-        timeout={300}
-        classNames="prev-list"
+      <div
+        css={styles.track}
+        style={{
+          height: trackHeight ? `${trackHeight}px` : "auto",
+        }}
       >
-        <div
-          style={{
-            position: "absolute",
-            bottom: 0,
-            width: "100%",
-            transform: initialTransform ? "translateY(-150px)" : void 0,
-          }}
-          key={prevBids?.length}
+        <CSSTransition
+          in={translatePrevBids}
+          timeout={300}
+          classNames="prev-list"
         >
-          {prevBids?.map((bid, i) => {
-            return (
-              <BidItem
-                current={i === bids.length - 1}
-                key={`${bid.returnValues.value}-${prevBids?.length}`}
-                style={{
-                  opacity: 1 * ((i + 1) / bids.length),
-                  // transform: `scale(${1 - (bids.length - (i + 1)) * 0.025})`,
-                }}
-                bid={bid}
-              ></BidItem>
-            );
-          })}
-        </div>
-      </CSSTransition>
-      {currentBid && (
-        <CSSTransition timeout={400} in={translateCurrentBid} classNames="item">
           <div
+            ref={prevBidsRef}
             style={{
               position: "absolute",
               bottom: 0,
               width: "100%",
+              transform: initialTransform ? "translateY(-150px)" : void 0,
             }}
             key={prevBids?.length}
           >
-            <BidItem
-              current
-              key={currentBid.returnValues.value}
-              style={{
-                background: "rgba(225, 169,0,0.07)",
-              }}
-              bid={currentBid}
-            ></BidItem>
+            {prevBids?.map((bid, i) => {
+              return (
+                <BidItem
+                  current={i === bids.length - 1}
+                  key={`${bid.returnValues.value}-${prevBids?.length}`}
+                  bid={bid}
+                ></BidItem>
+              );
+            })}
           </div>
         </CSSTransition>
-      )}
+        {currentBid && (
+          <CSSTransition
+            timeout={400}
+            in={translateCurrentBid}
+            classNames="item"
+          >
+            <div
+              ref={currentBidsRef}
+              style={{
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+              }}
+              key={prevBids?.length}
+            >
+              <BidItem
+                current
+                key={currentBid.returnValues.value}
+                style={{
+                  background: "rgba(225, 169,0,0.07)",
+                }}
+                bid={currentBid}
+              ></BidItem>
+            </div>
+          </CSSTransition>
+        )}
+      </div>
     </div>
   );
 }

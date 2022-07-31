@@ -18,6 +18,7 @@ const paths = require("./paths");
 const modules = require("./modules");
 const getClientEnvironment = require("./env");
 const ModuleNotFoundPlugin = require("react-dev-utils/ModuleNotFoundPlugin");
+
 const ForkTsCheckerWebpackPlugin =
   process.env.TSC_COMPILE_ON_ERROR === "true"
     ? require("react-dev-utils/ForkTsCheckerWarningWebpackPlugin")
@@ -376,6 +377,7 @@ module.exports = function (webpackEnv) {
             },
             {
               test: /\.svg$/,
+              exclude: /node_modules\/(?!(reactions)\/).*/,
               use: [
                 {
                   loader: require.resolve("@svgr/webpack"),
@@ -404,7 +406,11 @@ module.exports = function (webpackEnv) {
             // The preset includes JSX, Flow, TypeScript, and some ESnext features.
             {
               test: /\.(js|mjs|jsx|ts|tsx)$/,
-              include: paths.appSrc,
+              include: [
+                paths.appSrc,
+                path.resolve(__dirname, "../../node_modules/reactions"),
+              ],
+              exclude: /node_modules\/(?!(reactions)\/).*/,
               loader: require.resolve("babel-loader"),
               options: {
                 customize: require.resolve(
