@@ -1,0 +1,32 @@
+.item-enter {
+  opacity: 0 !important;
+  transform: translateX(100%) !important;
+}
+.item-enter-active,
+.item-enter-done {
+  opacity: 1 !important;
+  transform: translateX(0) !important;
+  transition: all 300ms ease-out;
+  transition-delay: 100ms;
+}
+.item-exit,
+.item-exit-active,
+.item-exit-done {
+  opacity: 1 !important;
+}
+
+/* .prev-list-enter {
+  transform: translateY(0);
+} */
+
+.prev-list-enter-active,
+.prev-list-enter-done {
+  transition: transform 300ms ease-out;
+  transform: translateY(-150px);
+}
+
+.prev-list-exit,
+.prev-list-exit-active,
+.prev-list-exit-done {
+  transform: translateY(-150px);
+}

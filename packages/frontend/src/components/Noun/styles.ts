@@ -15,7 +15,6 @@ export const styles = {
   img: css({
     width: "100%",
     height: "auto",
-    borderRadius: "10px",
   }),
   timerWrap: css({
     display: "flex",

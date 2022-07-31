@@ -4,6 +4,7 @@ import express, { NextFunction, Request, Response } from "express";
 import { router } from "./routes";
 import bodyParser from "body-parser";
 import { sockets } from "./sockets";
+import "./utils/listeners";
 
 const app = express();
 app.use(bodyParser.json());

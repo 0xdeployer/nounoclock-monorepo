@@ -1,5 +1,6 @@
 import e, { Request, Response } from "express";
 import {
+  getBidEventsAndMetadata,
   getBidEventsForNoun,
   getCurrentBlockTime,
   getCurrentNounAuction,
@@ -9,7 +10,7 @@ import BN from "bignumber.js";
 import { client } from "../redis";
 import { log } from "../utils";
 
-const REDIS_CURRENT_AUCTION_KEY = "currentauction";
+export const REDIS_CURRENT_AUCTION_KEY = "currentauction";
 
 export async function currentAuction(req: Request, res: Response) {
   try {
@@ -19,7 +20,7 @@ export async function currentAuction(req: Request, res: Response) {
     const fetchAndSaveAuction = async () => {
       const auction = await getCurrentNounAuction();
       const [bids, metadata] = await Promise.all([
-        getBidEventsForNoun(auction.nounId),
+        getBidEventsAndMetadata(auction.nounId),
         getNounMetadataBase64(auction.nounId),
       ]);
       const output = { auction, bids, metadata };

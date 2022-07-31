@@ -6,19 +6,30 @@ export const styles = {
     padding: "25px",
     boxSizing: "border-box",
     minHeight: "150px",
-
     alignItems: "center",
   }),
   bidsWrap: css({
-    position: "absolute",
-    display: "flex",
-    flexDirection: "column",
-    width: "100%",
-    bottom: 0,
+    transition: "opacity 200ms",
   }),
   bidItemInner: css({
     display: "flex",
     gap: "20px",
     alignItems: "center",
+  }),
+
+  bidItemAvatarWrap: css({
+    display: "flex",
+    alignItems: "center",
+  }),
+  bidItemAvatar: css({
+    marginRight: "5px",
+  }),
+  infoWrap: css({
+    display: "flex",
+    alignItems: "center",
+    gap: "10px",
+  }),
+  prevBidsWrap: css({
+    transform: "translateY(-150px)",
   }),
 };

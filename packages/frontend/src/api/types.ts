@@ -5,6 +5,12 @@ export type Bid = {
     value: string;
     extended: false;
   };
+  ethInWallet: string;
+  address: string;
+  avatar: string;
+  displayName: string;
+  name: string;
+  numberOfNouns: string;
 };
 
 export type GetCurrentAuctionResponseRaw = GetCurrentAuctionResponse & {

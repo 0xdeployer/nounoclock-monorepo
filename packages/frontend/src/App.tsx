@@ -1,10 +1,11 @@
 import { css } from "@emotion/react";
-import React, { useRef } from "react";
+import React, { useEffect, useRef } from "react";
 import { io } from "socket.io-client";
 import { Noun } from "./components/Noun";
 import logo from "./logo.svg";
-import { useGetCurrentAuction } from "./hooks/useGetCurrentAuction";
 import { Bids } from "./components/Bids";
+import { useConnectWs } from "./hooks/useConnectWs";
+import { useAppStore } from "./stores";
 
 const socket = io("ws://localhost:3333");
 
@@ -28,8 +29,15 @@ const styles = {
 };
 
 function App() {
-  const currentAuction = useGetCurrentAuction();
+  useConnectWs(socket);
   const nounContainerRef = useRef<HTMLDivElement>(null);
+  const getAuctionData = useAppStore((state) => state.getAuctionData);
+  useEffect(() => {
+    getAuctionData();
+  }, []);
+
+  const currentAuction = useAppStore((state) => state.auction);
+
   if (!currentAuction) {
     return <>LOADING</>;
   }
