@@ -11,6 +11,7 @@ export type Bid = {
   displayName: string;
   name: string;
   numberOfNouns: string;
+  pending?: boolean;
 };
 
 export type GetCurrentAuctionResponseRaw = GetCurrentAuctionResponse & {

@@ -5,8 +5,9 @@ import { Header } from "../ui/Header";
 import { format, getUnixTime, intervalToDuration } from "date-fns";
 import BN from "bignumber.js";
 import { useAppStore } from "../../stores";
-import { useAccount, usePrepareContractWrite, useContractWrite } from "wagmi";
+import { useAccount } from "wagmi";
 import { Button } from "../ui/Button";
+import { SettleButton } from "../SettleButton";
 
 type NounProps = {
   data: GetCurrentAuctionResponse;
@@ -16,23 +17,8 @@ type NounProps = {
 export function Noun({ data, container }: NounProps) {
   const [count, updateCount] = useState(0);
   const { isConnected } = useAccount();
-  const { config } = usePrepareContractWrite({
-    addressOrName: process.env.REACT_APP_NOUN_AUCTION_HOUSE_PROXY as string,
-    contractInterface: [
-      {
-        inputs: [],
-        name: "settleCurrentAndCreateNewAuction",
-        outputs: [],
-        stateMutability: "nonpayable",
-        type: "function",
-      },
-    ],
-    functionName: "settleCurrentAndCreateNewAuction",
-  });
-  const { write } = useContractWrite(config);
 
   const endTime = useAppStore((store) => store.endTime);
-  const blurredCount = useRef(0);
 
   const [today, todayFormatted] = useMemo(() => {
     const today = new Date();
@@ -93,17 +79,7 @@ export function Noun({ data, container }: NounProps) {
         </div>
       </div>
       <img css={styles.img} src={data.metadata.image} />
-      {isConnected && (
-        <a
-          href="#"
-          onClick={(e) => {
-            e.preventDefault();
-            write?.();
-          }}
-        >
-          Settle manually
-        </a>
-      )}
+      {isConnected && pastEndTime && <SettleButton />}
     </div>
   );
 }
