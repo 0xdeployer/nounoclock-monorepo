@@ -9,6 +9,8 @@ import { client } from "../../redis";
 import { sockets } from "../../sockets";
 import { AuctionBidEvent } from "../../types";
 import { REDIS_CURRENT_AUCTION_KEY } from "../../routes/current-auction";
+import Reaction from "../../database/Reaction";
+import { log } from "../log";
 
 let options = {
   clientConfig: {
@@ -87,11 +89,17 @@ const test = () => ({
 //   io.emit("bid", test());
 // }, 5000);
 
-setTimeout(() => {
-  const io = sockets();
+// setTimeout(() => {
+//   const io = sockets();
+//   console.log("emit end");
+//   io.emit("endtime", "0");
+// }, 5000);
 
-  io.emit("endtime", "0");
-}, 5000);
+// setTimeout(() => {
+//   const io = sockets();
+//   console.log("hello chelsea");
+//   io.emit("auctioncreated");
+// }, 10000);
 
 export function addWeb3Listeners() {
   const nounAuctionHouseProxy = getContract(
@@ -99,9 +107,15 @@ export function addWeb3Listeners() {
     web3
   );
 
-  nounAuctionHouseProxy.events.AuctionCreated(() => {
+  nounAuctionHouseProxy.events.AuctionCreated(async () => {
+    console.log("Auction created");
     const io = sockets();
     io.emit("auctioncreated");
+    try {
+      await Reaction.remove({}).exec();
+    } catch (e: any) {
+      log(e.message);
+    }
   });
 
   nounAuctionHouseProxy.events.AuctionBid(

@@ -7,6 +7,8 @@ export function useConnectWs(socket: Socket) {
   const addBid = useAppStore((state) => state.addBid);
   const setEndTime = useAppStore((state) => state.setEndTime);
   const setReaction = useAppStore((state) => state.setReaction);
+  const getAuctionData = useAppStore((state) => state.getAuctionData);
+
   useEffect(() => {
     const listenForBid = (bid: Bid) => {
       addBid(bid);
@@ -14,7 +16,9 @@ export function useConnectWs(socket: Socket) {
     const updateEndTime = (endTime: string) => {
       setEndTime(endTime);
     };
-    const auctionCreated = () => {};
+    const auctionCreated = () => {
+      getAuctionData();
+    };
     const onReaction = async ({
       bidId,
       reactionId,

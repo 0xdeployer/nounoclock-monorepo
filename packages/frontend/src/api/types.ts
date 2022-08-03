@@ -34,3 +34,9 @@ export type GetCurrentAuctionResponse = {
   };
   blockTimestamp: string;
 };
+
+export type ReactionsFromApi = {
+  [bidId: string]: {
+    [reactionId: string]: number;
+  };
+};

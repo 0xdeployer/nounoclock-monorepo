@@ -16,6 +16,7 @@ const images = [one, two, three, four, five, six];
 type ReactionsProps = {
   totals?: { [id: string]: number };
   bidId: string;
+  nounId: string;
 };
 
 export function Reactions(props: ReactionsProps) {
@@ -73,7 +74,7 @@ export function Reactions(props: ReactionsProps) {
               refs.current[reaction.id] = [src, value];
             }}
             onClick={(el) => {
-              react(props.bidId, reaction.id);
+              react(props.nounId, props.bidId, reaction.id);
               addFloaty(el.currentTarget, src);
             }}
             css={styles.imageWrap}

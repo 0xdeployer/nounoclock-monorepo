@@ -1,5 +1,6 @@
 import create from "zustand";
 import { Bid, getCurrentAuction, GetCurrentAuctionResponse } from "../api";
+import { getReactions } from "../api/getReactions";
 import { socket } from "../App";
 
 type State = {
@@ -12,7 +13,7 @@ type State = {
     };
   };
   setReaction: (bidId: string, reactionId: string) => void;
-  react: (bidId: string, reactionId: string) => void;
+  react: (noundId: string, bidId: string, reactionId: string) => void;
   setEndTime: (endTime: string) => void;
   setBids: (bids: Bid[]) => void;
   addBid: (bid: Bid) => void;
@@ -23,8 +24,10 @@ export const useAppStore = create<State>()((set, get) => {
   return {
     async getAuctionData() {
       const auction = await getCurrentAuction();
+      const reactions = await getReactions(auction.auction.nounId);
       get().setBids(auction.bids);
-      set({ auction });
+      get().setEndTime(auction.auction.endTime);
+      set({ auction, reactions });
     },
     setBids: (bids: Bid[]) => {
       set({ bids });
@@ -52,9 +55,9 @@ export const useAppStore = create<State>()((set, get) => {
         },
       });
     },
-    react: (bidId: string, reactionId: string) => {
+    react: (nounId: string, bidId: string, reactionId: string) => {
       get().setReaction(bidId, reactionId);
-      socket.emit("reaction", { bidId, reactionId });
+      socket.emit("reaction", { nounId, bidId, reactionId });
     },
   };
 });

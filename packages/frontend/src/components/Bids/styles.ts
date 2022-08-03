@@ -10,6 +10,7 @@ export const styles = {
   }),
   track: css({
     position: "relative",
+    minHeight: "100%",
   }),
   bidsWrap: css({
     transition: "opacity 0.3s",

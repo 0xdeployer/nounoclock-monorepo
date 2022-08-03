@@ -42,7 +42,7 @@ export function BidItem({ bid, style }: BidItemProps) {
             )}
             {bid.numberOfNouns && <div>{`${bid.numberOfNouns} nouns`}</div>}
           </div>
-          <Reactions bidId={getBidId(bid)} />
+          <Reactions nounId={bid.returnValues.nounId} bidId={getBidId(bid)} />
         </div>
       </div>
     </div>
