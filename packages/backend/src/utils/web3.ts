@@ -116,7 +116,7 @@ export async function getBidMetadata(bid: AuctionBidEvent) {
 
 export async function getNounMetadataBase64(nounId: string) {
   const contract = getContract(ContractNames.NounToken);
-  return contract.methods.dataURI(nounId).call({ gas: "99999999999" });
+  return contract.methods.dataURI(nounId).call({ gas: "9999999999" });
 }
 
 export async function getEnsInfo(address: string) {

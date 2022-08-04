@@ -1,6 +1,7 @@
 import BigNumber from "bignumber.js";
 import React from "react";
 import { Bid } from "../../api";
+import { useAppStore } from "../../stores";
 import { getBidId, truncateAddress } from "../../utils";
 import { Reactions } from "../Reactions";
 import { Avatar } from "../ui";
@@ -14,6 +15,12 @@ type BidItemProps = {
 };
 
 export function BidItem({ bid, style }: BidItemProps) {
+  const bidId = getBidId(
+    bid.returnValues.nounId,
+    bid.returnValues.sender,
+    bid.returnValues.value
+  );
+  const note = useAppStore((state) => state.notes?.[bidId]);
   return (
     <div data-id="biditem" css={styles.bidItem} style={style}>
       <div css={styles.bidItemInner}>
@@ -42,7 +49,8 @@ export function BidItem({ bid, style }: BidItemProps) {
             )}
             {bid.numberOfNouns && <div>{`${bid.numberOfNouns} nouns`}</div>}
           </div>
-          <Reactions nounId={bid.returnValues.nounId} bidId={getBidId(bid)} />
+          {note && <h2>{note}</h2>}
+          <Reactions nounId={bid.returnValues.nounId} bidId={bidId} />
         </div>
       </div>
     </div>

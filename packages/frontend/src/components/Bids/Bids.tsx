@@ -10,6 +10,7 @@ import {
 } from "react-transition-group";
 import "./styles.css";
 import { usePrevious } from "../../hooks";
+import emptySvg from "../../empty.svg";
 
 type BidsProps = {
   bids?: GetCurrentAuctionResponse["bids"];
@@ -39,13 +40,7 @@ export function Bids({ nounContainer }: BidsProps) {
   }, [bids]);
   const prevCurrent = usePrevious<Bid | undefined>(currentBid);
   React.useEffect(() => {
-    if (
-      bids &&
-      currentBid &&
-      prevCurrent &&
-      `${prevCurrent.returnValues.sender}-${prevCurrent.returnValues.value}` !==
-        `${currentBid.returnValues.sender}-${currentBid.returnValues.value}`
-    ) {
+    if (bids && bids.length) {
       if (initialTransform) {
         updateInitialTransform(false);
       }
@@ -84,7 +79,12 @@ export function Bids({ nounContainer }: BidsProps) {
     }
   }, [trackHeight]);
 
-  if (!bids) return null;
+  if (!bids || bids.length === 0)
+    return (
+      <div css={styles.emptyWrap}>
+        <img src={emptySvg} />
+      </div>
+    );
   return (
     <div
       ref={bidsWrapRef}

@@ -13,9 +13,17 @@ export function SettleButton() {
         type: "function",
       },
     ],
+    onError(error) {
+      console.log("Error", error);
+    },
     functionName: "settleCurrentAndCreateNewAuction",
   });
-  const { write } = useContractWrite(config);
+  const { write } = useContractWrite({
+    ...config,
+    onError(error) {
+      console.log("Error", error);
+    },
+  });
   return (
     <a
       href="#"

@@ -1,5 +1,10 @@
 import create from "zustand";
-import { Bid, getCurrentAuction, GetCurrentAuctionResponse } from "../api";
+import {
+  Bid,
+  getCurrentAuction,
+  GetCurrentAuctionResponse,
+  postNote,
+} from "../api";
 import { getReactions } from "../api/getReactions";
 import { socket } from "../App";
 
@@ -12,12 +17,25 @@ type State = {
       [reactionId: string]: number;
     };
   };
+  noteSignatures?: {
+    [bidId: string]: { note: string; sig: string };
+  };
+  notes?: {
+    [bidId: string]: string;
+  };
+  setNote: (bidId: string, note: string) => void;
+  setNoteSignature: (bidId: string, sig: string, note: string) => void;
   setReaction: (bidId: string, reactionId: string) => void;
   react: (noundId: string, bidId: string, reactionId: string) => void;
   setEndTime: (endTime: string) => void;
   setBids: (bids: Bid[]) => void;
   addBid: (bid: Bid) => void;
   getAuctionData: () => Promise<void>;
+  postAndSetNote: (
+    nounId: string,
+    bidId: string,
+    address: string
+  ) => Promise<void>;
 };
 
 export const useAppStore = create<State>()((set, get) => {
@@ -28,6 +46,33 @@ export const useAppStore = create<State>()((set, get) => {
       get().setBids(auction.bids);
       get().setEndTime(auction.auction.endTime);
       set({ auction, reactions });
+    },
+    setNote: (bidId: string, note: string) => {
+      set({
+        notes: {
+          ...get().notes,
+          [bidId]: note,
+        },
+      });
+    },
+    async postAndSetNote(nounId, bidId, address) {
+      const data = get().noteSignatures?.[bidId];
+      if (!data) {
+        console.error("No note");
+        return;
+      }
+      const { note, sig } = data;
+      get().setNote(bidId, note);
+      await postNote({ bidId, nounId, address, note, signature: sig });
+    },
+    setNoteSignature: (bidId: string, sig: string, note) => {
+      console.log("ehllooooooo");
+      set({
+        noteSignatures: {
+          ...get().noteSignatures,
+          [bidId]: { sig, note },
+        },
+      });
     },
     setBids: (bids: Bid[]) => {
       set({ bids });

@@ -1,30 +1,27 @@
-import React, { useCallback, useMemo, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { TextField } from "../ui";
 import { Button } from "../ui/Button";
 import { styles } from "./styles";
 import { useAccount } from "wagmi";
 import { useAppStore } from "../../stores";
 import BigNumber from "bignumber.js";
-import { usePrepareContractWrite, useContractWrite } from "wagmi";
-
-const computeMinimumNextBid = (
-  currentBid: BigNumber,
-  minBidIncPercentage: BigNumber | undefined
-): BigNumber => {
-  if (!minBidIncPercentage) {
-    return new BigNumber(0);
-  }
-  return currentBid
-    .times(minBidIncPercentage.div(100).plus(1))
-    .decimalPlaces(0, BigNumber.ROUND_UP);
-};
+import {
+  usePrepareContractWrite,
+  useContractWrite,
+  useSignMessage,
+} from "wagmi";
+import { useAuctionCountdown } from "../../hooks";
+import { getBidId } from "../../utils";
 
 export function BidForm() {
-  const { isConnected } = useAccount();
+  const { isConnected, address } = useAccount();
   const bids = useAppStore((state) => state.bids ?? []);
+  const nounId = useAppStore((state) => state.auction?.auction.nounId);
+  const setNoteSignature = useAppStore((state) => state.setNoteSignature);
+  const postAndSetNote = useAppStore((state) => state.postAndSetNote);
+  const noteSignatures = useAppStore((state) => state.noteSignatures);
   const [bidValue, updateBidValue] = useState("");
   const [note, updateNote] = useState("");
-
   const nextBid = useMemo(() => {
     const output = bids
       .filter((bid) => !bid.pending)
@@ -36,12 +33,15 @@ export function BidForm() {
           : 1
       );
 
-    return computeMinimumNextBid(
-      new BigNumber(output[output.length - 1]?.returnValues.value ?? 0),
-      new BigNumber(2)
-    )
+    const highestBid = bids[bids.length - 1];
+
+    if (!highestBid) return "0.01";
+
+    const bnValue = new BigNumber(highestBid.returnValues.value);
+    return bnValue
+      .plus(bnValue.times(0.02))
       .div(10 ** 18)
-      .toFixed(2);
+      .toFixed(4);
   }, [bids]);
 
   const onBidChange = useCallback((evt: any) => {
@@ -52,12 +52,25 @@ export function BidForm() {
     updateNote(evt.target.value);
   }, []);
 
-  let value = "0";
+  let value = new BigNumber("0.01").times(10 ** 18);
 
   try {
-    value = new BigNumber(bidValue).times(10 ** 18).toFixed();
+    value = new BigNumber(bidValue).times(10 ** 18);
   } catch {}
 
+  const { pastEndTime } = useAuctionCountdown();
+
+  const pepareContractWriteEnabled = !!(
+    isConnected &&
+    nounId &&
+    !value.isNaN() &&
+    !pastEndTime &&
+    value.gte(nextBid)
+  );
+
+  const bidId = getBidId(nounId as string, address as string, value.toFixed());
+
+  const { signMessageAsync } = useSignMessage();
   const { config } = usePrepareContractWrite({
     addressOrName: process.env.REACT_APP_NOUN_AUCTION_HOUSE_PROXY as string,
     contractInterface: [
@@ -76,13 +89,30 @@ export function BidForm() {
       },
     ],
     functionName: "createBid",
-    enabled: isConnected,
+    enabled: pepareContractWriteEnabled,
+    args: [nounId],
     overrides: {
       // @ts-ignore
-      value,
+      value: value.toFixed(),
+    },
+    onError(error) {
+      // no op
     },
   });
-  const { write } = useContractWrite(config);
+  const noteSigRef = useRef(noteSignatures);
+  noteSigRef.current = noteSignatures;
+  const postNote = useRef<any>();
+  postNote.current = () => {
+    if (note && noteSignatures?.[bidId])
+      postAndSetNote(nounId as string, bidId, address as string);
+  };
+
+  const { write } = useContractWrite({
+    ...config,
+    onSuccess: () => {
+      postNote.current();
+    },
+  });
 
   return (
     <form
@@ -91,6 +121,19 @@ export function BidForm() {
         console.log("hi");
         try {
           write?.();
+          const fn = async () => {
+            if (note) {
+              try {
+                const sig = await signMessageAsync({ message: note });
+                console.log("BID ID", bidId);
+                setNoteSignature(bidId, sig, note);
+                console.log(sig);
+              } catch (e) {
+                console.log(e);
+              }
+            }
+          };
+          fn();
         } catch (e) {
           console.error(e);
         }
@@ -107,7 +150,7 @@ export function BidForm() {
         onChange={onNoteChange}
         placeholder="Add a note"
       />
-      <Button disabled={!isConnected}>Place bid</Button>
+      <Button disabled={!pepareContractWriteEnabled}>Place bid</Button>
     </form>
   );
 }

@@ -18,6 +18,8 @@ export async function currentAuction(req: Request, res: Response) {
     const cached = await client?.exists(REDIS_CURRENT_AUCTION_KEY);
 
     const fetchAndSaveAuction = async () => {
+      console.log("fetch new auction");
+
       const auction = await getCurrentNounAuction();
       const [bids, metadata] = await Promise.all([
         getBidEventsAndMetadata(auction.nounId),
@@ -44,6 +46,7 @@ export async function currentAuction(req: Request, res: Response) {
           blockTimestamp: currentBlockTimestamp.toFixed(),
         });
       } else {
+        console.log("returning cached auction");
         return res.json({
           ...cachedAuction,
           blockTimestamp: currentBlockTimestamp.toFixed(),

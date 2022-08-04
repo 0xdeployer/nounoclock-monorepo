@@ -8,6 +8,7 @@ import { useAppStore } from "../../stores";
 import { useAccount } from "wagmi";
 import { Button } from "../ui/Button";
 import { SettleButton } from "../SettleButton";
+import { useAuctionCountdown } from "../../hooks";
 
 type NounProps = {
   data: GetCurrentAuctionResponse;
@@ -15,31 +16,15 @@ type NounProps = {
 };
 
 export function Noun({ data, container }: NounProps) {
-  const [count, updateCount] = useState(0);
   const { isConnected } = useAccount();
-
-  const endTime = useAppStore((store) => store.endTime);
 
   const [today, todayFormatted] = useMemo(() => {
     const today = new Date();
     return [today, format(new Date(), "PPP")];
   }, []);
 
-  useEffect(() => {
-    const timeout = setTimeout(() => {
-      updateCount((c) => {
-        return c + 1;
-      });
-    }, 1000);
+  const { start, end, pastEndTime } = useAuctionCountdown();
 
-    return () => {
-      clearTimeout(timeout);
-    };
-  }, [count]);
-
-  const end = new BN(endTime ?? data.auction.endTime);
-  const start = new BN(Math.floor(Date.now() / 1000));
-  const pastEndTime = start.gte(end);
   let hours, minutes, seconds;
   if (!pastEndTime) {
     ({ hours, minutes, seconds } = intervalToDuration({

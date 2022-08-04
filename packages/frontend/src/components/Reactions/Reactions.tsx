@@ -70,6 +70,7 @@ export function Reactions(props: ReactionsProps) {
         const src = images[Number(reaction.id) - 1];
         return (
           <div
+            key={reaction.id}
             ref={(value: HTMLDivElement) => {
               refs.current[reaction.id] = [src, value];
             }}
