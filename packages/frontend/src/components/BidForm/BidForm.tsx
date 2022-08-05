@@ -124,7 +124,8 @@ export function BidForm() {
           const fn = async () => {
             if (note) {
               try {
-                const sig = await signMessageAsync({ message: note });
+                const msg = `I would like to associate the following note with my bid:\n\n${note}\n\nNoun o Clock Bid ID ${bidId}`;
+                const sig = await signMessageAsync({ message: msg });
                 console.log("BID ID", bidId);
                 setNoteSignature(bidId, sig, note);
                 console.log(sig);

@@ -41,3 +41,13 @@ export type ReactionsFromApi = {
     [reactionId: string]: number;
   };
 };
+
+export type Note = string;
+
+export type NotesFromApi = {
+  [bidId: string]: Note;
+};
+
+export type OrignalEndTimeFromApi = {
+  endTime: string;
+};

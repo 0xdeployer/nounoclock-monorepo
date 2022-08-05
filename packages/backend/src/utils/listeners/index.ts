@@ -11,6 +11,7 @@ import { AuctionBidEvent } from "../../types";
 import { REDIS_CURRENT_AUCTION_KEY } from "../../routes/current-auction";
 import Reaction from "../../database/Reaction";
 import { log } from "../log";
+import Note from "../../database/Note";
 
 let options = {
   clientConfig: {
@@ -112,7 +113,7 @@ export function addWeb3Listeners() {
     const io = sockets();
     io.emit("auctioncreated");
     try {
-      await Reaction.remove({}).exec();
+      await Promise.all([Reaction.remove({}).exec(), Note.remove({}).exec()]);
     } catch (e: any) {
       log(e.message);
     }

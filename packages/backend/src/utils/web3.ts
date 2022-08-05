@@ -54,6 +54,17 @@ export async function getBidEventsForNoun(nounId: string) {
   });
 }
 
+export async function getAuctionCreatedEvent(nounId: string) {
+  const contract = getContract(ContractNames.NounsAuctionHouseProxy);
+  return contract.getPastEvents("AuctionCreated", {
+    filter: {
+      nounId,
+    },
+    fromBlock: "earliest",
+    toBlock: "latest",
+  });
+}
+
 export async function getBidEventsAndMetadata(nounId: string) {
   const bidEvents = await getBidEventsForNoun(nounId);
   return Promise.all(

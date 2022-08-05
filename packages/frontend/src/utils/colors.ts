@@ -4,4 +4,5 @@ export const colors = {
   charlie: "#FFFFFF",
   delta: "#DEDEDE",
   echo: "#808080",
+  fargo: "#E5E5E5",
 };

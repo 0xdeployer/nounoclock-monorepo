@@ -7,6 +7,7 @@ import { useConnectWs } from "./hooks/useConnectWs";
 import { useAppStore } from "./stores";
 import { BidForm } from "./components/BidForm";
 import { NavBar } from "./components/NavBar";
+import { Calendar } from "./components/Calendar";
 
 export const socket = io("ws://localhost:3333");
 
@@ -37,6 +38,9 @@ const styles = {
     display: "flex",
     justifyContent: "flex-end",
   }),
+  nounWrap: css({
+    width: "50%",
+  }),
 };
 
 function App() {
@@ -60,11 +64,15 @@ function App() {
       <NavBar />
       <div css={styles.wrap}>
         <div css={styles.content}>
-          <Noun
-            key={endTime}
-            container={nounContainerRef}
-            data={currentAuction}
-          />
+          <div css={styles.nounWrap}>
+            <Noun
+              key={endTime}
+              container={nounContainerRef}
+              data={currentAuction}
+            />
+            <Calendar />
+          </div>
+
           <div style={{ flex: 1, position: "relative" }}>
             <Bids
               nounContainer={nounContainerRef}
