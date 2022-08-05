@@ -39,26 +39,12 @@ export function Noun({ data, container }: NounProps) {
           <p>{todayFormatted}</p>
         </div>
         <div css={styles.timerWrap}>
-          {pastEndTime && (
-            <>
-              <a
-                target="_blank"
-                style={{ textDecoration: "none" }}
-                href="https://fomonouns.wtf/"
-                rel="noreferrer"
-              >
-                <Button>VOTE FOR THE NEXT NOUN!</Button>
-              </a>
-            </>
-          )}
-          {!pastEndTime && (
-            <>
-              <p>Auction ends in</p>
-              <Header type="h3">
-                {hours} hours {minutes} minutes {seconds} seconds
-              </Header>
-            </>
-          )}
+          <>
+            <p>Auction ends in</p>
+            <Header type="h3">
+              {hours ?? 0} hours {minutes ?? 0} minutes {seconds ?? 0} seconds
+            </Header>
+          </>
         </div>
       </div>
       <img css={styles.img} src={data.metadata.image} />
@@ -66,10 +52,3 @@ export function Noun({ data, container }: NounProps) {
     </div>
   );
 }
-// {
-//   "inputs": [],
-//   "name": "settleCurrentAndCreateNewAuction",
-//   "outputs": [],
-//   "stateMutability": "nonpayable",
-//   "type": "function"
-// },
