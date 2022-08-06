@@ -11,6 +11,7 @@ import {
 import "./styles.css";
 import { usePrevious } from "../../hooks";
 import emptySvg from "../../empty.svg";
+import { useMq } from "../../utils";
 
 type BidsProps = {
   bids?: GetCurrentAuctionResponse["bids"];
@@ -24,6 +25,7 @@ export function Bids({ nounContainer }: BidsProps) {
   const [translatePrevBids, updateTranslatePrevBids] = useState(false);
   const [translateCurrentBid, updateTranslateCurrentBid] = useState(false);
   const [initialTransform, updateInitialTransform] = useState(true);
+  const { matches } = useMq();
 
   React.useEffect(() => {
     setTimeout(() => {
@@ -53,21 +55,29 @@ export function Bids({ nounContainer }: BidsProps) {
         updateTranslateCurrentBid(false);
       }, 500);
     }
-  }, [bids, initialTransform, currentBid, prevCurrent]);
+    // Adding matches to trigger this effect when the breakpoint changes.
+  }, [bids, initialTransform, currentBid, prevCurrent, matches["0"]]);
 
   const prevBidsRef = useRef<HTMLDivElement>(null);
   const currentBidsRef = useRef<HTMLDivElement>(null);
   const bidsWrapRef = useRef<HTMLDivElement>(null);
   const [trackHeight, updateTrackHeight] = useState<number | undefined>();
   React.useLayoutEffect(() => {
-    let height = 0;
-    if (prevBidsRef.current) {
-      height += prevBidsRef.current.offsetHeight;
-    }
-    if (currentBidsRef.current) {
-      height += currentBidsRef.current.offsetHeight;
-    }
-    updateTrackHeight(height);
+    const cb = () => {
+      let height = 0;
+      if (prevBidsRef.current) {
+        height += prevBidsRef.current.offsetHeight;
+      }
+      if (currentBidsRef.current) {
+        height += currentBidsRef.current.offsetHeight;
+      }
+      updateTrackHeight(height);
+    };
+    window.addEventListener("resize", cb);
+    cb();
+    return () => {
+      window.removeEventListener("resize", cb);
+    };
   }, [bids]);
 
   React.useEffect(() => {
@@ -86,46 +96,42 @@ export function Bids({ nounContainer }: BidsProps) {
       </div>
     );
   return (
-    <div
-      ref={bidsWrapRef}
-      css={styles.bidsWrap}
-      style={{
-        height: height ? `${height}px` : "auto",
-        opacity: height ? 1 : 0,
-      }}
-    >
+    <div ref={bidsWrapRef} css={styles.bidsWrap}>
       <div
         css={styles.track}
         style={{
           height: trackHeight ? `${trackHeight}px` : "auto",
+          overflow: translatePrevBids ? "hidden" : void 0,
         }}
       >
-        <CSSTransition
-          in={translatePrevBids}
-          timeout={300}
-          classNames="prev-list"
-        >
-          <div
-            ref={prevBidsRef}
-            style={{
-              position: "absolute",
-              bottom: 0,
-              width: "100%",
-              transform: initialTransform ? "translateY(-150px)" : void 0,
-            }}
-            key={prevBids?.length}
+        {!matches["0"] && (
+          <CSSTransition
+            in={translatePrevBids}
+            timeout={300}
+            classNames="prev-list"
           >
-            {prevBids?.map((bid, i) => {
-              return (
-                <BidItem
-                  current={i === bids.length - 1}
-                  key={`${bid.returnValues.value}-${prevBids?.length}`}
-                  bid={bid}
-                ></BidItem>
-              );
-            })}
-          </div>
-        </CSSTransition>
+            <div
+              ref={prevBidsRef}
+              style={{
+                position: "absolute",
+                bottom: 0,
+                width: "100%",
+                transform: initialTransform ? "translateY(-150px)" : void 0,
+              }}
+              key={prevBids?.length}
+            >
+              {prevBids?.map((bid, i) => {
+                return (
+                  <BidItem
+                    current={i === bids.length - 1}
+                    key={`${bid.returnValues.value}-${prevBids?.length}`}
+                    bid={bid}
+                  ></BidItem>
+                );
+              })}
+            </div>
+          </CSSTransition>
+        )}
         {currentBid && (
           <CSSTransition
             timeout={400}
@@ -138,6 +144,7 @@ export function Bids({ nounContainer }: BidsProps) {
                 position: "absolute",
                 bottom: 0,
                 width: "100%",
+                transform: "translateX(100%)",
               }}
               key={prevBids?.length}
             >

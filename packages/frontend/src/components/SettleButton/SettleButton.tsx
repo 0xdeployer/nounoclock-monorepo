@@ -26,6 +26,7 @@ export function SettleButton() {
   });
   return (
     <a
+      style={{ position: "fixed", bottom: 0, right: 0 }}
       href="#"
       onClick={(e) => {
         e.preventDefault();

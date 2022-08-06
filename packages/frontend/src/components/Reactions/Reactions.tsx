@@ -9,7 +9,7 @@ import reactionsJson from "reactions/src/reactions.json";
 import { useAppStore } from "../../stores";
 import { styles } from "./styles";
 import "./styles.css";
-import { socket } from "../../App";
+import { socket } from "../../utils";
 
 const images = [one, two, three, four, five, six];
 

@@ -15,8 +15,16 @@ export const styles = {
     borderRadius: "3px",
     fontSize: "16px",
     width: "100%;",
+    borderWidth: "1px",
+    borderStyle: "solid",
+    borderColor: "transparent",
     "&:disabled": {
       background: colors.echo,
     },
+  }),
+  bravo: css({
+    color: colors.alpha,
+    background: colors.charlie,
+    borderColor: colors.alpha,
   }),
 };

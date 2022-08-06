@@ -1,55 +1,67 @@
 import BigNumber from "bignumber.js";
-import React from "react";
-import { useAuctionCountdown } from "../../hooks";
+import { intervalToDuration } from "date-fns";
+import React, { useMemo, useRef } from "react";
+import { useAuctionCountdown, useNocStartTime } from "../../hooks";
 import { useAppStore } from "../../stores";
 import { Button } from "../ui/Button";
 import { styles } from "./styles";
+import choiceImg from "./choice.svg";
+import { NocCountDown } from "../NocCountdown";
 
 type Event = {
   startTime: number;
-  title: string;
   activeTitle?: string;
-  cta?: React.ReactNode;
+  content: React.ReactNode;
   top?: string;
 };
 
 type Events = Event[];
 
-// Should be 15 minutes in production
-const NOC_MIN_BEFORE_AUCTION_END = 5;
-
 export function Calendar() {
-  const originalEndTime = useAppStore(
-    (state) => state.originalEndTime ?? state.endTime
-  );
   const auctionStartTime = useAppStore(
     (state) => state.auction?.auction.startTime
   );
   const { end, pastEndTime } = useAuctionCountdown();
-  const timeBuffer = end.minus(originalEndTime ?? "0");
+
+  const getProgress = (date: number) => {
+    const start = new BigNumber(auctionStartTime as string);
+    const now = date;
+    const totalTime = end.minus(start).toNumber();
+    const progress = now - start.toNumber();
+    return {
+      progress: (progress / totalTime) * 100,
+      totalTime,
+    };
+  };
+
+  const { progress } = getProgress(Date.now() / 1000);
+
+  const { nocActive, nocStartTime, timeLeftToNoc } = useNocStartTime();
 
   const events: Events = [
     {
-      startTime: new BigNumber(originalEndTime as string)
-        .minus(NOC_MIN_BEFORE_AUCTION_END * 60)
-        .toNumber(),
-      title: "The Daily Noun O'Clock Show",
-      cta: (
-        <>
-          <p>Starts 15 minutes before auction close.</p>Listen on twitter
-        </>
-      ),
+      startTime: nocStartTime,
+      content: <NocCountDown />,
+      top: "-10px",
     },
     {
       startTime: end.toNumber(),
-      title: "Auction ends",
       top: "-8px",
-      cta: (
+      content: (
         <>
+          <p css={styles.title}>Auction ends</p>
           {pastEndTime && (
             <div>
               <p>Let's play FOMO and vote for the next Noun together!</p>
-              <Button>Play now</Button>
+              <a
+                href="https://fomonouns.wtf/"
+                target="_blank"
+                css={styles.playBtn}
+                rel="noreferrer"
+              >
+                <img src={choiceImg} />
+                Play now
+              </a>
             </div>
           )}
         </>
@@ -57,36 +69,24 @@ export function Calendar() {
     },
   ];
 
-  const getProgress = (date: number) => {
-    const start = new BigNumber(auctionStartTime as string);
-    const now = date;
-    const totalTime = end.minus(start).toNumber();
-    const progress = now - start.toNumber();
-    return (progress / totalTime) * 100;
-  };
-
-  const start = new BigNumber(auctionStartTime as string);
-  const now = Date.now() / 1000;
-  const totalTime = end.minus(start).toNumber();
-  const progress = now - start.toNumber();
-  console.log("AMOUNT DONE", 100 - (progress / totalTime) * 100);
+  const topBuffer = events.reduce((a, b) => a + parseInt(b.top ?? "0"), 0);
 
   return (
-    <div style={{ marginTop: "20px" }}>
+    <div css={styles.wrap}>
       <div css={styles.calendarWrap}>
         <div css={styles.statusBarWrap}>
           <div
             css={styles.innerStatusBar}
             style={{
-              top: `-${100 - getProgress(Date.now() / 1000)}%`,
+              top: `calc(-${100 - progress}% + ${topBuffer - 10}px)`,
             }}
           />
         </div>
-        {events.map((event) => {
-          const top = getProgress(event.startTime);
+        {events.map((event, i) => {
+          const top = getProgress(event.startTime).progress;
           return (
             <div
-              key={event.title}
+              key={i}
               style={{
                 position: "absolute",
                 left: 0,
@@ -101,9 +101,13 @@ export function Calendar() {
                 }}
               >
                 <div css={styles.circle} />{" "}
-                <div style={{ transform: "translateY(-4px)" }}>
-                  <div style={{ fontWeight: "bold" }}>{event.title}</div>
-                  <div> {event.cta}</div>
+                <div
+                  style={{
+                    position: "relative",
+                    transform: "translateY(-4px)",
+                  }}
+                >
+                  {event.content}
                 </div>
               </div>
             </div>

@@ -13,6 +13,7 @@
 .item-exit-active,
 .item-exit-done {
   opacity: 1 !important;
+  transform: translateX(0) !important;
 }
 
 /* .prev-list-enter {

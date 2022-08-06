@@ -1,5 +1,5 @@
 export function truncateAddress(address: string) {
-  return `${address.substring(0, 5)}...${address.substring(
-    address.length - 5
+  return `${address.substring(0, 4)}...${address.substring(
+    address.length - 4
   )}`;
 }

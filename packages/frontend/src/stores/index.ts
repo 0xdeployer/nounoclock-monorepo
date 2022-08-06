@@ -8,7 +8,7 @@ import {
 } from "../api";
 import { getOriginalEndTime } from "../api/getOriginalEndTime";
 import { getReactions } from "../api/getReactions";
-import { socket } from "../App";
+import { socket } from "../utils";
 import { devtools } from "zustand/middleware";
 
 type State = {
@@ -26,7 +26,9 @@ type State = {
   notes?: {
     [bidId: string]: string;
   };
+  watchers?: number;
   originalEndTime?: string;
+  setWatchers: (num: number) => void;
   setNote: (bidId: string, note: string) => void;
   setNoteSignature: (bidId: string, sig: string, note: string) => void;
   setReaction: (bidId: string, reactionId: string) => void;
@@ -56,6 +58,7 @@ export const useAppStore = create<State>()(
         get().setEndTime(auction.auction.endTime);
         set({ auction, reactions, notes, originalEndTime });
       },
+      setWatchers: (num) => set({ watchers: num }),
       setNote: (bidId: string, note: string) => {
         set({
           notes: {

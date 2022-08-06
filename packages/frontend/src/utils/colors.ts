@@ -5,4 +5,6 @@ export const colors = {
   delta: "#DEDEDE",
   echo: "#808080",
   fargo: "#E5E5E5",
+  golf: "#C0C0C0",
+  hotel: "#E3E3E3",
 };

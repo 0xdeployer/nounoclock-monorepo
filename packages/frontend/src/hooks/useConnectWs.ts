@@ -9,6 +9,7 @@ export function useConnectWs(socket: Socket) {
   const setReaction = useAppStore((state) => state.setReaction);
   const getAuctionData = useAppStore((state) => state.getAuctionData);
   const setNote = useAppStore((state) => state.setNote);
+  const setWatchers = useAppStore((state) => state.setWatchers);
 
   useEffect(() => {
     const listenForBid = (bid: Bid) => {
@@ -32,11 +33,15 @@ export function useConnectWs(socket: Socket) {
     const onNote = async ({ bidId, note }: { bidId: string; note: string }) => {
       setNote(bidId, note);
     };
+    const onWatcher = (numWatchers: number) => {
+      setWatchers(numWatchers);
+    };
     socket.on("bid", listenForBid);
     socket.on("endtime", updateEndTime);
     socket.on("auctioncreated", auctionCreated);
     socket.on("reaction", onReaction);
     socket.on("note", onNote);
+    socket.on("watcher", onWatcher);
 
     return () => {
       socket.off("bid", listenForBid);
@@ -44,6 +49,7 @@ export function useConnectWs(socket: Socket) {
       socket.off("auctioncreated", auctionCreated);
       socket.off("reaction", onReaction);
       socket.off("note", onNote);
+      socket.off("watcher", onWatcher);
     };
   }, []);
 }

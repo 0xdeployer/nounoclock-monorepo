@@ -23,5 +23,6 @@ export function useAuctionCountdown() {
     end,
     start,
     pastEndTime,
+    flip,
   };
 }
