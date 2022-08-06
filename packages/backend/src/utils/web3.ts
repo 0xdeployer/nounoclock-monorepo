@@ -131,8 +131,8 @@ export async function getNounMetadataBase64(nounId: string) {
 }
 
 export async function getEnsInfo(address: string) {
-  return fetch(`https://api.ensideas.com/ens/resolve/${address}`).then((res) =>
-    res.json()
+  return fetch(`https://api.ensideas.com/ens/resolve/${address}`).then(
+    (res: any) => res.json()
   );
 }
 
