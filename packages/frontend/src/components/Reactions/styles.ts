@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { colors, mq } from "../../utils";
 
-const imgHeight = ["24px", "32px"];
+const imgHeight = ["34px", "32px"];
 
 export const styles = {
   wrap: css(
