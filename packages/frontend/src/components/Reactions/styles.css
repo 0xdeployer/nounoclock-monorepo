@@ -1,9 +1,9 @@
 .float-wrap {
   position: absolute;
-  width: 24px;
+  width: 32px;
 }
 .imageFloaty {
-  width: 24px;
+  width: 32px;
   height: auto;
 }
 
