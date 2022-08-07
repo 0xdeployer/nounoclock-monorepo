@@ -4,7 +4,7 @@ import { useMemo } from "react";
 import { useAppStore } from "../stores";
 
 // Should be 15 minutes in production
-const NOC_MIN_BEFORE_AUCTION_END = 7;
+const NOC_MIN_BEFORE_AUCTION_END = 15;
 
 export function useNocStartTime() {
   const originalEndTime = useAppStore(

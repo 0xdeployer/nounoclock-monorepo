@@ -42,7 +42,7 @@ export function Calendar() {
     {
       startTime: nocStartTime,
       content: <NocCountDown />,
-      top: "-10px",
+      top: "-130px",
     },
     {
       startTime: end.toNumber(),
