@@ -7,11 +7,11 @@ export const styles = {
   wrap: css(
     mq({
       background: colors.charlie,
-      paddingBottom: 0,
       display: "flex",
       justifyContent: "space-between",
       position: "sticky",
-      marginBottom: ["25px", "20px"],
+      maxWidth: "none",
+      borderBottom: `1px solid ${colors.jaguar}`,
       zIndex: 100,
       top: 0,
     })
@@ -30,7 +30,7 @@ export const styles = {
     alignItems: "center",
     gap: "10px",
   }),
-  btnWrap: css({ display: "flex", alignItem: "center", gap: "10px" }),
+  btnWrap: css({ display: "flex", alignItem: "center", gap: "40px", flex: 1 }),
   logoWrap: css({ display: "flex", alignItems: "center", gap: "10px" }),
   watchers: css({
     justifyContent: "space-around",
@@ -42,5 +42,9 @@ export const styles = {
     borderRadius: "3px",
     fontSize: "11px",
     minWidth: "40px",
+  }),
+  btn: css({
+    display: "inline-flex",
+    width: "auto",
   }),
 };

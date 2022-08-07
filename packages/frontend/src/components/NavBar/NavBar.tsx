@@ -8,33 +8,34 @@ import { Header } from "../ui";
 import { Button } from "../ui/Button";
 import { styles } from "./styles";
 import { styles as appStyles } from "../App/styles";
-import { textGolf } from "../../styles/text";
 import { NounName } from "../NounName";
 import { useMq } from "../../utils";
-import { Timer } from "../Timer";
 import eyeImg from "./eye.svg";
+import { css } from "@emotion/react";
+import { generalWrapper } from "../../styles/layout";
+import { Timer } from "../Timer";
 
 export function NavBar() {
   const { matches } = useMq();
   const watchers = useAppStore((state) => state.watchers);
   return (
-    <div css={styles.wrap}>
-      <div css={appStyles.nounWrap}>
+    <div css={css(generalWrapper, styles.wrap)}>
+      <div css={css(appStyles.nounWrap, `border-right: 0`)}>
         <div css={styles.headerWrap}>
           <div css={styles.logoWrap}>
             <img css={styles.logo} src={logo} />
             {!matches["0"] && <NounName />}
           </div>
-
-          {!matches["0"] && <Timer />}
         </div>
       </div>
       <div css={styles.btnWrap}>
+        {!matches["0"] && <Timer />}
+
         <div css={styles.watchers}>
           <img src={eyeImg} />
           {watchers}
         </div>
-        <ConnectButton />
+        <ConnectButton css={styles.btn} />
       </div>
     </div>
   );

@@ -4,6 +4,7 @@ import {
   getBidEventsForNoun,
   getCurrentBlockTime,
   getCurrentNounAuction,
+  getNounBackground,
   getNounMetadataBase64,
 } from "../utils/web3";
 import BN from "bignumber.js";
@@ -21,11 +22,12 @@ export async function currentAuction(req: Request, res: Response) {
       console.log("fetch new auction");
 
       const auction = await getCurrentNounAuction();
-      const [bids, metadata] = await Promise.all([
+      const [bids, metadata, background] = await Promise.all([
         getBidEventsAndMetadata(auction.nounId),
         getNounMetadataBase64(auction.nounId),
+        getNounBackground(auction.nounId),
       ]);
-      const output = { auction, bids, metadata };
+      const output = { auction, bids, metadata, background };
       try {
         await client.set(REDIS_CURRENT_AUCTION_KEY, JSON.stringify(output));
       } catch (e: any) {

@@ -91,15 +91,13 @@ export function Bids({ nounContainer }: BidsProps) {
       }, 100);
     }
   }, [trackHeight]);
-
-  if (!bids || bids.length === 0)
-    return (
-      <div css={styles.emptyWrap}>
-        <img src={emptySvg} />
-      </div>
-    );
+  const hasBids = bids && bids.length > 0;
   return (
     <div ref={bidsWrapRef} css={styles.bidsWrap}>
+      <div css={styles.nogglesWrap}>
+        <img src={emptySvg} />
+        {!hasBids && <span>No bids yet</span>}
+      </div>
       <div
         css={styles.track}
         style={{
@@ -107,60 +105,63 @@ export function Bids({ nounContainer }: BidsProps) {
           overflow: translatePrevBids ? "hidden" : void 0,
         }}
       >
-        {!matches["0"] && (
-          <CSSTransition
-            in={translatePrevBids}
-            timeout={300}
-            classNames="prev-list"
-          >
-            <div
-              ref={prevBidsRef}
-              style={{
-                position: "absolute",
-                bottom: 0,
-                width: "100%",
-                transform: initialTransform ? "translateY(-150px)" : void 0,
-              }}
-              key={prevBids?.length}
-            >
-              {prevBids?.map((bid, i) => {
-                return (
+        {hasBids && (
+          <>
+            {!matches["0"] && (
+              <CSSTransition
+                in={translatePrevBids}
+                timeout={300}
+                classNames="prev-list"
+              >
+                <div
+                  ref={prevBidsRef}
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    width: "100%",
+                    transform: initialTransform ? "translateY(-150px)" : void 0,
+                  }}
+                  key={prevBids?.length}
+                >
+                  {prevBids?.map((bid, i) => {
+                    const current =
+                      currentBid?.pending && i === prevBids.length - 1;
+                    return (
+                      <BidItem
+                        current={current}
+                        key={`${bid.returnValues.value}-${prevBids?.length}`}
+                        bid={bid}
+                      ></BidItem>
+                    );
+                  })}
+                </div>
+              </CSSTransition>
+            )}
+            {currentBid && (
+              <CSSTransition
+                timeout={400}
+                in={translateCurrentBid}
+                classNames="item"
+              >
+                <div
+                  ref={currentBidsRef}
+                  style={{
+                    position: "absolute",
+                    bottom: 0,
+                    width: "100%",
+                    transform: "translateX(100%)",
+                  }}
+                  key={prevBids?.length}
+                >
                   <BidItem
-                    current={i === bids.length - 1}
-                    key={`${bid.returnValues.value}-${prevBids?.length}`}
-                    bid={bid}
+                    current={!currentBid.pending}
+                    key={currentBid.returnValues.value}
+                    bid={currentBid}
                   ></BidItem>
-                );
-              })}
-            </div>
-          </CSSTransition>
-        )}
-        {currentBid && (
-          <CSSTransition
-            timeout={400}
-            in={translateCurrentBid}
-            classNames="item"
-          >
-            <div
-              ref={currentBidsRef}
-              style={{
-                position: "absolute",
-                bottom: 0,
-                width: "100%",
-                transform: "translateX(100%)",
-              }}
-              key={prevBids?.length}
-            >
-              <BidItem
-                current
-                key={currentBid.returnValues.value}
-                style={{
-                  background: "rgba(225, 169,0,0.07)",
-                }}
-                bid={currentBid}
-              ></BidItem>
-            </div>
-          </CSSTransition>
+                </div>
+              </CSSTransition>
+            )}
+          </>
         )}
       </div>
     </div>

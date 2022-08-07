@@ -8,7 +8,7 @@ import {
 } from "../api";
 import { getOriginalEndTime } from "../api/getOriginalEndTime";
 import { getReactions } from "../api/getReactions";
-import { socket } from "../utils";
+import { getBidId, socket } from "../utils";
 import { devtools } from "zustand/middleware";
 
 type State = {
@@ -78,7 +78,6 @@ export const useAppStore = create<State>()(
         await postNote({ bidId, nounId, address, note, signature: sig });
       },
       setNoteSignature: (bidId: string, sig: string, note) => {
-        console.log("ehllooooooo");
         set({
           noteSignatures: {
             ...get().noteSignatures,
@@ -90,8 +89,23 @@ export const useAppStore = create<State>()(
         set({ bids });
       },
       addBid: (bid: Bid) => {
+        const bidId = getBidId(
+          bid.returnValues.nounId,
+          bid.returnValues.sender,
+          bid.returnValues.value
+        );
+        // Filter bids if there was a previous pending bid
+        const bids = (get().bids ?? []).filter(
+          (b) =>
+            getBidId(
+              b.returnValues.nounId,
+              b.returnValues.sender,
+              b.returnValues.value
+            ) !== bidId
+        );
+        bids.push(bid);
         set({
-          bids: [...(get().bids ?? []), bid],
+          bids,
         });
       },
       setEndTime: (endTime: string) => {

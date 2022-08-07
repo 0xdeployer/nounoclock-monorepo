@@ -115,43 +115,49 @@ export function BidForm() {
   });
 
   return (
-    <form
-      onSubmit={(e) => {
-        e.preventDefault();
-        console.log("hi");
-        try {
-          write?.();
-          const fn = async () => {
-            if (note) {
-              try {
-                const msg = `I would like to associate the following note with my bid:\n\n${note}\n\nNoun o Clock Bid ID ${bidId}`;
-                const sig = await signMessageAsync({ message: msg });
-                console.log("BID ID", bidId);
-                setNoteSignature(bidId, sig, note);
-                console.log(sig);
-              } catch (e) {
-                console.log(e);
+    <>
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          console.log("hi");
+          try {
+            write?.();
+            const fn = async () => {
+              if (note) {
+                try {
+                  const msg = `I would like to associate the following note with my bid:\n\n${note}\n\nNoun o Clock Bid ID ${bidId}`;
+                  const sig = await signMessageAsync({ message: msg });
+                  console.log("BID ID", bidId);
+                  setNoteSignature(bidId, sig, note);
+                  console.log(sig);
+                } catch (e) {
+                  console.log(e);
+                }
               }
-            }
-          };
-          fn();
-        } catch (e) {
-          console.error(e);
-        }
-      }}
-      css={styles.wrap}
-    >
-      <TextField
-        onChange={onBidChange}
-        value={bidValue}
-        placeholder={`Ξ ${nextBid === "0.00" ? "0.01" : nextBid} or more`}
-      />
-      <TextField
-        value={note}
-        onChange={onNoteChange}
-        placeholder="Add a note"
-      />
-      <Button disabled={!pepareContractWriteEnabled}>Place bid</Button>
-    </form>
+            };
+            fn();
+          } catch (e) {
+            console.error(e);
+          }
+        }}
+        css={styles.wrap}
+      >
+        <TextField
+          onChange={onBidChange}
+          css={styles.priceInput}
+          value={bidValue}
+          placeholder={`Ξ ${nextBid === "0.00" ? "0.01" : nextBid} or more`}
+        />
+        <TextField
+          value={note}
+          css={styles.noteInput}
+          onChange={onNoteChange}
+          placeholder="Add a note"
+        />
+        <Button css={styles.btn} disabled={!pepareContractWriteEnabled}>
+          Place bid
+        </Button>
+      </form>
+    </>
   );
 }

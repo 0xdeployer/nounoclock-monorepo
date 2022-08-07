@@ -2,6 +2,7 @@ import Web3 from "web3";
 import { HttpProvider, WebsocketProvider } from "web3-core/types";
 import NounsAuctionHouseAbi from "../abi/NounsAuctionHouse.json";
 import NounTokenAbi from "../abi/NounToken.json";
+import NounsDescriptorV2Abi from "../abi/NounsDescriptorV2.json";
 import { AuctionBidEvent } from "../types";
 import fetch from "node-fetch";
 import { log } from "./log";
@@ -9,6 +10,7 @@ import { log } from "./log";
 export enum ContractNames {
   NounsAuctionHouseProxy = "NounsAuctionHouseProxy",
   NounToken = "NounToken",
+  NounsDescriptorV2 = "NounsDescriptorV2",
 }
 
 const contractInfo: { [key in ContractNames]: any } = {
@@ -17,6 +19,7 @@ const contractInfo: { [key in ContractNames]: any } = {
     process.env.NOUN_AUCTION_HOUSE_PROXY,
   ],
   NounToken: [NounTokenAbi, process.env.NOUN_TOKEN],
+  NounsDescriptorV2: [NounsDescriptorV2Abi, process.env.NOUNS_DESCRIPTOR_V2],
 };
 
 export function getHttpProvider() {
@@ -123,6 +126,12 @@ export async function getBidMetadata(bid: AuctionBidEvent) {
     ethInWallet,
     numberOfNouns,
   };
+}
+
+export async function getNounBackground(nounId: string) {
+  const contract = getContract(ContractNames.NounToken);
+  const seed = await contract.methods.seeds(nounId).call();
+  return seed.background;
 }
 
 export async function getNounMetadataBase64(nounId: string) {

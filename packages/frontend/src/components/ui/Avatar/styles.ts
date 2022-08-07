@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { mq } from "../../../utils";
 
-const size = ["32px", "18px"];
+const size = ["18px", "18px"];
 
 export const styles = {
   wrap: css(

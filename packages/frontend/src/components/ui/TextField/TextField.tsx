@@ -6,11 +6,17 @@ type TextFieldProps = {
   value?: string;
   error?: boolean;
   onChange?: any;
+  className?: any;
 };
 
-export function TextField({ placeholder, value, onChange }: TextFieldProps) {
+export function TextField({
+  placeholder,
+  value,
+  onChange,
+  className,
+}: TextFieldProps) {
   return (
-    <div css={styles.wrap}>
+    <div className={className} css={styles.wrap}>
       <input
         onChange={onChange}
         placeholder={placeholder}

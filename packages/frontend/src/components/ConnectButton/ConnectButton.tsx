@@ -3,7 +3,7 @@ import { Button } from "../ui/Button";
 import { useEnsName, useAccount } from "wagmi";
 import { truncateAddress } from "../../utils";
 
-export function ConnectButton() {
+export function ConnectButton({ className }: { className?: any }) {
   const { address } = useAccount();
 
   const { data, isError, isLoading } = useEnsName({
@@ -13,7 +13,7 @@ export function ConnectButton() {
     <ConnectKitButton.Custom>
       {({ isConnected, isConnecting, show, hide, address, ensName }) => {
         return (
-          <Button variant="bravo" onClick={show}>
+          <Button css={className} variant="bravo" onClick={show}>
             {isConnected
               ? data ?? truncateAddress(address as string)
               : "Connect wallet"}

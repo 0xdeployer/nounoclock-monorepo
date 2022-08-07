@@ -10,6 +10,7 @@ import { useAppStore } from "../../stores";
 import { styles } from "./styles";
 import "./styles.css";
 import { socket } from "../../utils";
+import { css } from "@emotion/react";
 
 const images = [one, two, three, four, five, six];
 

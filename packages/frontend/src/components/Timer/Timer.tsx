@@ -10,8 +10,11 @@ const styles = {
   timerWrap: css(
     mq({
       display: "flex",
-      flexDirection: "column",
-      alignItems: ["flex-end", "flex-start"],
+      flexDirection: "row",
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "flex-end",
+      gap: "10px",
     })
   ),
   numbers: css(mq({ fontSize: ["", "14px"] })),

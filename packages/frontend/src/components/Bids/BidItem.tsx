@@ -4,7 +4,7 @@ import { Bid } from "../../api";
 import { useAppStore } from "../../stores";
 import { getBidId, truncateAddress, useMq } from "../../utils";
 import { Reactions } from "../Reactions";
-import { Avatar } from "../ui";
+import { Avatar, Tag } from "../ui";
 import { Header } from "../ui/Header";
 import { styles } from "./styles";
 
@@ -14,7 +14,7 @@ type BidItemProps = {
   current?: boolean;
 };
 
-export function BidItem({ bid, style }: BidItemProps) {
+export function BidItem({ bid, style, current }: BidItemProps) {
   const bidId = getBidId(
     bid.returnValues.nounId,
     bid.returnValues.sender,
@@ -25,13 +25,22 @@ export function BidItem({ bid, style }: BidItemProps) {
   return (
     <>
       <div data-id="biditem" css={styles.bidItem} style={style}>
-        <div css={styles.bidItemInner}>
-          <Header css={styles.price}>
-            <>
-              {"Ξ "}
-              {new BigNumber(bid.returnValues.value).div(10 ** 18).toFixed(2)}
-            </>
-          </Header>
+        <div
+          style={{
+            background: current ? "#FFFDE8" : bid.pending ? "#F8F8F8" : void 0,
+          }}
+          css={styles.bidItemInner}
+        >
+          <div css={styles.priceWrap}>
+            <Header css={styles.price}>
+              <>
+                {"Ξ "}
+                {new BigNumber(bid.returnValues.value).div(10 ** 18).toFixed(2)}
+              </>
+            </Header>
+            {bid.pending && <Tag variant="gray">Pending</Tag>}
+            {current && <Tag variant="gold">Current Bid</Tag>}
+          </div>
           <div css={styles.info}>
             <div css={styles.social}>
               <div css={styles.bidItemAvatarWrap}>

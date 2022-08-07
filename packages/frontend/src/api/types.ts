@@ -34,6 +34,7 @@ export type GetCurrentAuctionResponse = {
     description: string;
   };
   blockTimestamp: string;
+  background: "0" | "1";
 };
 
 export type ReactionsFromApi = {

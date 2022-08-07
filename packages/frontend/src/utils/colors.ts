@@ -7,4 +7,8 @@ export const colors = {
   fargo: "#E5E5E5",
   golf: "#C0C0C0",
   hotel: "#E3E3E3",
+  igloo: "#FAFAFA",
+  jaguar: "#EEEEEE",
+  kangaroo: "#C7C7C7",
+  lambo: "#B4B4B4",
 };

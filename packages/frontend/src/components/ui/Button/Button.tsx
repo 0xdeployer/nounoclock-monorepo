@@ -7,17 +7,25 @@ type Props = {
   disabled?: boolean;
   onClick?: () => void;
   variant?: keyof typeof variants;
+  className?: any;
 };
 
 const variants = {
   bravo: styles.bravo,
 };
 
-export function Button({ children, onClick, disabled, variant }: Props) {
+export function Button({
+  children,
+  onClick,
+  disabled,
+  variant,
+  className,
+}: Props) {
   return (
     <button
       disabled={disabled}
       onClick={onClick}
+      className={className}
       css={css(styles.wrap, variant ? variants[variant] : void 0)}
     >
       {children}

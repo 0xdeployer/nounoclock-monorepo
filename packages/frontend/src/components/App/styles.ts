@@ -1,44 +1,52 @@
 import { css } from "@emotion/react";
-import { mq } from "../../utils";
+import { generalWrapper, padding } from "../../styles/layout";
+import { colors, mq, type } from "../../utils";
 
 export const styles = {
-  wrap: css({
-    padding: "25px 50px 25px 100px",
-    position: "relative",
-    maxWidth: "1600px",
-    margin: "auto",
+  appWrap: css(generalWrapper, {
+    paddingTop: 0,
+    paddingBottom: 0,
+    paddingRight: 0,
   }),
   content: css(
     mq({
       flexDirection: ["row", "column"],
       display: "flex",
-      gap: "30px",
-      marginTop: ["25px", "10px"],
     })
   ),
-
-  gradient: css({
-    background:
-      "linear-gradient(180deg, rgba(255,255,255,1) 0%, rgba(0,0,0,0) 50%)",
-    width: "100%",
-    height: "100%",
-    position: "absolute",
-    top: 0,
-    left: 0,
-    pointerEvents: "none",
-  }),
   bidFormWrap: css({
     display: "flex",
     justifyContent: "center",
     flex: 1,
     alignItems: "flex-start",
-    paddingTop: "50px",
   }),
+  // Applies to noun image container and noun name in nav bar
   nounWrap: css(
     mq({
       width: ["32%", "100%"],
       display: ["", "flex"],
       gap: ["", "9px"],
+      paddingRight: padding,
+    })
+  ),
+  // Apply only to noun image container
+  nounWrapExtra: css(
+    mq({
+      borderRight: `1px solid ${colors.jaguar}`,
+      paddingBottom: "100px",
+      paddingTop: ["12px", "8px"],
+    })
+  ),
+  mono: css(
+    mq({
+      textAlign: "center",
+      fontFamily: type.mono,
+      padding: ["12px", "8px"],
+      color: colors.lambo,
+      fontSize: "11px",
+      "& a": {
+        color: "inherit",
+      },
     })
   ),
 };
