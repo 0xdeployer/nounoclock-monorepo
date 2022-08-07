@@ -74,7 +74,10 @@ export function Bids({ nounContainer }: BidsProps) {
       updateTrackHeight(height);
     };
     window.addEventListener("resize", cb);
-    cb();
+    setTimeout(() => {
+      cb();
+    }, 10);
+
     return () => {
       window.removeEventListener("resize", cb);
     };
