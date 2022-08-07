@@ -18,6 +18,7 @@ export const styles = {
     borderWidth: "1px",
     borderStyle: "solid",
     borderColor: "transparent",
+    whiteSpace: "nowrap",
     "&:disabled": {
       background: colors.echo,
     },
