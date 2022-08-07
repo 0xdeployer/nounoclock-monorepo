@@ -1,2 +1,4 @@
 import { io } from "socket.io-client";
-export const socket = io("ws://localhost:3333");
+export const socket = io(
+  process.env.REACT_APP_WS_SERVER ?? "ws://localhost:3333"
+);
