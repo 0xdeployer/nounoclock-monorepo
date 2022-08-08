@@ -3,11 +3,15 @@ import { generalWrapper, padding } from "../../styles/layout";
 import { colors, mq, type } from "../../utils";
 
 export const styles = {
-  appWrap: css(generalWrapper, {
-    paddingTop: 0,
-    paddingBottom: 0,
-    paddingRight: 0,
-  }),
+  appWrap: css(
+    generalWrapper,
+    mq({
+      padding: ["12px", "8px"],
+      paddingTop: 0,
+      paddingBottom: 0,
+      paddingRight: 0,
+    })
+  ),
   content: css(
     mq({
       flexDirection: ["row", "column"],
@@ -26,7 +30,7 @@ export const styles = {
       width: ["32%", "100%"],
       display: ["", "flex"],
       gap: ["", "9px"],
-      paddingRight: padding,
+      paddingRight: ["12px", "8px"],
     })
   ),
   // Apply only to noun image container

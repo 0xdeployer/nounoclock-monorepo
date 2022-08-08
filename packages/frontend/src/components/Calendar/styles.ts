@@ -54,7 +54,8 @@ export const styles = {
   }),
   wrap: css({
     flex: "1",
-    marginTop: "30px",
+    marginTop: "12px",
+    paddingLeft: "10px",
   }),
   tag: css({
     background,
