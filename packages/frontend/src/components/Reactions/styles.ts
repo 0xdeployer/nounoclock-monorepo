@@ -28,9 +28,11 @@ export const styles = {
       alignItems: "center",
     })
   ),
-  total: css({
-    fontWeight: "bold",
-    color: "rgba(0,0,0,.6)",
-    fontSize: ["12px", "10px"],
-  }),
+  total: css(
+    mq({
+      fontWeight: "bold",
+      color: "rgba(0,0,0,.6)",
+      fontSize: ["12px", "10px"],
+    })
+  ),
 };
