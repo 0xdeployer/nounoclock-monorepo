@@ -1,7 +1,6 @@
 import { css } from "@emotion/react";
 import { colors, mq } from "../../utils";
 
-const height = ["calc(100vh - 242px)", "auto"];
 const bidItemPadding = ["12px", "8px"];
 
 export const styles = {
@@ -17,9 +16,10 @@ export const styles = {
       padding: bidItemPadding,
       paddingBottom: "0",
       boxSizing: "border-box",
-      height: ["150px", "90px"],
+      height: ["150px", "100px"],
       alignItems: "center",
       flexDirection: "column",
+      minWidth: "350px",
     })
   ),
   bidItemScaled: css({ height: ["100px"] }),
@@ -31,7 +31,7 @@ export const styles = {
   ),
   note: css(
     mq({
-      fontSize: ["", "20px"],
+      fontSize: ["", "16px"],
     })
   ),
   noteScaled: css({
@@ -47,18 +47,17 @@ export const styles = {
     mq({
       position: "relative",
       willChange: "transform",
-      overflowY: ["scroll", "visible"],
-
+      overflowY: "scroll",
       backgroundColor: colors.igloo,
       borderBottom: `1px solid ${colors.jaguar}`,
       paddingBottom: bidItemPadding,
-      height,
+      height: ["calc(100vh - 242px)", "calc(100vh - 242px)"],
     })
   ),
   bidItemInner: css(
     mq({
       display: "flex",
-      gap: ["", "12px"],
+      gap: ["", "5px"],
       alignItems: "center",
       background: colors.charlie,
       borderRadius: "4px",
@@ -66,8 +65,9 @@ export const styles = {
       width: "100%",
       height: "100%",
       flex: 1,
-      padding: ["10px 40px"],
+      padding: ["10px 40px", "5px"],
       transition: ".3s background",
+      minWidth: "350px",
     })
   ),
 
@@ -85,14 +85,11 @@ export const styles = {
       gap: ["10px", "6px"],
     })
   ),
-  prevBidsWrap: css({
-    transform: "translateY(-150px)",
-  }),
   info: css({
     display: "flex",
     flex: 1,
     flexDirection: "column",
-    gap: "10px",
+    gap: ["10px", "5px"],
   }),
   nogglesWrap: css({
     position: "absolute",
@@ -116,7 +113,7 @@ export const styles = {
   priceWrap: css({
     display: "flex",
     flexDirection: "column",
-    width: "150px",
+    width: ["150px", "75px"],
   }),
   priceWrapScale: css({
     fontSize: "14px",

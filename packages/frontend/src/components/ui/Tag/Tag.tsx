@@ -3,12 +3,12 @@ import React from "react";
 
 const styles = {
   base: css({
-    borderRadius: "4px",
-    padding: "2px 4px",
+    borderRadius: ["4px", "2px"],
+    padding: ["2px 4px", "1px 2px"],
     gap: "5px",
     alignItems: "center",
     justifyContent: "center",
-    fontSize: "11px",
+    fontSize: ["11px", "10px"],
     textTransform: "uppercase",
     display: "inline-flex",
     WebkitFontSmoothing: "subpixel-antialiased",

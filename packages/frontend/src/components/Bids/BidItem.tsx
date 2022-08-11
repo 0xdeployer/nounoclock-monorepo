@@ -20,7 +20,6 @@ export function BidItem({ bid, style, current }: BidItemProps) {
     bid.returnValues.sender,
     bid.returnValues.value
   );
-  const { matches } = useMq();
   const note = useAppStore((state) => state.notes?.[bidId]);
   return (
     <>
@@ -71,15 +70,10 @@ export function BidItem({ bid, style, current }: BidItemProps) {
                 {note}
               </Header>
             )}
-            {!matches["0"] && (
-              <Reactions nounId={bid.returnValues.nounId} bidId={bidId} />
-            )}
+            <Reactions nounId={bid.returnValues.nounId} bidId={bidId} />
           </div>
         </div>
       </div>
-      {matches["0"] && (
-        <Reactions nounId={bid.returnValues.nounId} bidId={bidId} />
-      )}
     </>
   );
 }

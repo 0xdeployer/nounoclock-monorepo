@@ -8,10 +8,11 @@ import {
   SwitchTransition,
   TransitionGroup,
 } from "react-transition-group";
-import "./styles.css";
+// import "./styles.css";
 import { usePrevious } from "../../hooks";
 import emptySvg from "../../empty.svg";
-import { useMq } from "../../utils";
+import { mq, useMq } from "../../utils";
+import { css, Global } from "@emotion/react";
 
 type BidsProps = {
   bids?: GetCurrentAuctionResponse["bids"];
@@ -94,6 +95,33 @@ export function Bids({ nounContainer }: BidsProps) {
   const hasBids = bids && bids.length > 0;
   return (
     <div ref={bidsWrapRef} css={styles.bidsWrap}>
+      <Global
+        styles={css(
+          mq({
+            ".item-enter": {
+              opacity: "0 !important",
+              transform: "translateX(100%) !important",
+            },
+            ".item-enter-active, .item-enter-done": {
+              opacity: "1 !important",
+              transform: "translateX(0) !important",
+              transition: "all 300ms ease-out",
+              "transition-delay": "100ms",
+            },
+            ".item-exit, .item-exit-active, .item-exit-done": {
+              opacity: "1 !important",
+              transform: "translateX(0) !important",
+            },
+            ".prev-list-enter-active, .prev-list-enter-done": {
+              transition: "transform 300ms ease-out",
+              transform: ["translateY(-150px)", "translateY(-98px)"],
+            },
+            ".prev-list-exit, .prev-list-exit-active, .prev-list-exit-done": {
+              transform: ["translateY(-150px)", "translateY(-98px)"],
+            },
+          })
+        )}
+      />
       <div css={styles.nogglesWrap}>
         <img src={emptySvg} />
         {!hasBids && <span>No bids yet</span>}
@@ -107,36 +135,35 @@ export function Bids({ nounContainer }: BidsProps) {
       >
         {hasBids && (
           <>
-            {!matches["0"] && (
-              <CSSTransition
-                in={translatePrevBids}
-                timeout={300}
-                classNames="prev-list"
+            <CSSTransition
+              in={translatePrevBids}
+              timeout={300}
+              classNames="prev-list"
+            >
+              <div
+                ref={prevBidsRef}
+                style={{
+                  position: "absolute",
+                  bottom: 0,
+                  width: "100%",
+                  transform: initialTransform ? "translateY(-150px)" : void 0,
+                }}
+                key={prevBids?.length}
               >
-                <div
-                  ref={prevBidsRef}
-                  style={{
-                    position: "absolute",
-                    bottom: 0,
-                    width: "100%",
-                    transform: initialTransform ? "translateY(-150px)" : void 0,
-                  }}
-                  key={prevBids?.length}
-                >
-                  {prevBids?.map((bid, i) => {
-                    const current =
-                      currentBid?.pending && i === prevBids.length - 1;
-                    return (
-                      <BidItem
-                        current={current}
-                        key={`${bid.returnValues.value}-${prevBids?.length}`}
-                        bid={bid}
-                      ></BidItem>
-                    );
-                  })}
-                </div>
-              </CSSTransition>
-            )}
+                {prevBids?.map((bid, i) => {
+                  const current =
+                    currentBid?.pending && i === prevBids.length - 1;
+                  return (
+                    <BidItem
+                      current={current}
+                      key={`${bid.returnValues.value}-${prevBids?.length}`}
+                      bid={bid}
+                    ></BidItem>
+                  );
+                })}
+              </div>
+            </CSSTransition>
+
             {currentBid && (
               <CSSTransition
                 timeout={400}
