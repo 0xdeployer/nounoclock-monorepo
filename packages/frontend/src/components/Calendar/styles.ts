@@ -58,16 +58,18 @@ export const styles = {
     marginTop: "px",
     paddingLeft: "10px",
   }),
-  tag: css({
-    background: [background, "#b9b9b9"],
-    color: "white",
-    display: "inline-block",
-    borderRadius: "3px",
-    fontSize: "12px",
-    fontWeight: "500",
-    padding: "3px 10px",
-    marginBottom: "3px",
-  }),
+  tag: css(
+    mq({
+      background: [background, "#b9b9b9"],
+      color: "white",
+      display: "inline-block",
+      borderRadius: "3px",
+      fontSize: "12px",
+      fontWeight: "500",
+      padding: "3px 10px",
+      marginBottom: "3px",
+    })
+  ),
   title: css(
     mq({
       fontWeight: "bold",
