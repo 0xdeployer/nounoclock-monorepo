@@ -10,14 +10,14 @@ const styles = {
   timerWrap: css(
     mq({
       display: "flex",
-      flexDirection: "row",
+      flexDirection: ["row"],
       flex: 1,
-      alignItems: "center",
-      justifyContent: "flex-end",
-      gap: "10px",
+      alignItems: ["center", "flex-start"],
+      justifyContent: ["flex-end", "center"],
+      gap: ["10px", "3px"],
     })
   ),
-  numbers: css(mq({ fontSize: ["", "14px"] })),
+  numbers: css(mq({ fontSize: ["", "12px"] })),
   title: css(
     textGolf,
     mq({

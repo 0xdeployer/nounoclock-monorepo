@@ -8,10 +8,11 @@ const twitterButton = css(
   mq({
     background: "#09A1F8",
     borderRadius: "25px",
-    padding: ["10px 25px", "10px 12px"],
-    display: "inline-block",
+    padding: ["10px 25px", "5px 20px"],
+    display: "inline-flex",
     textDecoration: "none",
-    marginTop: "8px",
+    gap: "5px",
+    marginTop: ["8px", "0"],
     color: "white",
     fontSize: ["12px", "11px"],
   })
@@ -54,11 +55,11 @@ export const styles = {
   }),
   wrap: css({
     flex: "1",
-    marginTop: "12px",
+    marginTop: "px",
     paddingLeft: "10px",
   }),
   tag: css({
-    background,
+    background: [background, "#b9b9b9"],
     color: "white",
     display: "inline-block",
     borderRadius: "3px",
@@ -70,7 +71,7 @@ export const styles = {
   title: css(
     mq({
       fontWeight: "bold",
-      marginBottom: "8px",
+      marginBottom: ["8px", "5px"],
       fontSize: ["", "12px"],
     })
   ),

@@ -30,7 +30,9 @@ export const styles = {
     alignItems: "center",
     gap: "10px",
   }),
-  btnWrap: css({ display: "flex", alignItem: "center", gap: "40px", flex: 1 }),
+  btnWrap: css(
+    mq({ display: "flex", alignItem: "center", gap: ["40px", "10px"], flex: 1 })
+  ),
   logoWrap: css({ display: "flex", alignItems: "center", gap: "10px" }),
   watchers: css({
     justifyContent: "space-around",

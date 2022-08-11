@@ -6,7 +6,7 @@ export const styles = {
   appWrap: css(
     generalWrapper,
     mq({
-      padding: ["12px", "8px"],
+      padding: ["12px", "0"],
       paddingTop: 0,
       paddingBottom: 0,
       paddingRight: 0,
@@ -36,9 +36,11 @@ export const styles = {
   // Apply only to noun image container
   nounWrapExtra: css(
     mq({
-      borderRight: `1px solid ${colors.jaguar}`,
-      paddingBottom: "100px",
-      paddingTop: ["12px", "8px"],
+      borderRight: [`1px solid ${colors.jaguar}`, ""],
+      paddingBottom: ["100px", "0"],
+      paddingTop: ["12px", "0"],
+      padding: ["", "0"],
+      borderBottom: ["", `1px solid ${colors.jaguar}`],
     })
   ),
   mono: css(

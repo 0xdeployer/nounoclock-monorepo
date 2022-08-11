@@ -1,6 +1,7 @@
 import React from "react";
 import { useAuctionCountdown, useNocStartTime } from "../../hooks";
 import { styles as calendarStyles } from "../Calendar";
+import twitterImg from "../../twitter.svg";
 
 export function NocCountDown() {
   // causes re-render
@@ -22,16 +23,14 @@ export function NocCountDown() {
       {/* <p css={calendarStyles.description}>
         Starts 15 minutes before auction close.
       </p> */}
-      {nocActive && (
-        <a
-          href="https://twitter.com/noun_o_clock"
-          target="_blank"
-          css={calendarStyles.twitterButton}
-          rel="noreferrer"
-        >
-          Listen on Twitter
-        </a>
-      )}
+      <a
+        href="https://twitter.com/noun_o_clock"
+        target="_blank"
+        css={calendarStyles.twitterButton}
+        rel="noreferrer"
+      >
+        <img src={twitterImg} /> Listen
+      </a>
     </>
   );
 }

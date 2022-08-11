@@ -24,7 +24,7 @@ export function NavBar() {
         <div css={styles.headerWrap}>
           <div css={styles.logoWrap}>
             <img css={styles.logo} src={logo} />
-            {!matches["0"] && <NounName />}
+            <NounName />
           </div>
         </div>
       </div>

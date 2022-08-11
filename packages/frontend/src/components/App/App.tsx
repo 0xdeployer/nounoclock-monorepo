@@ -57,7 +57,7 @@ function App() {
               data={currentAuction}
             />
             {matches["0"] && (
-              <div style={{ width: "38%" }}>
+              <div>
                 <div
                   style={{
                     display: "flex",
@@ -67,10 +67,7 @@ function App() {
                   }}
                 >
                   <div>
-                    <NounName />
-                    <div style={{ marginTop: "10px" }}>
-                      <Timer />
-                    </div>
+                    <Timer />
                   </div>
                   <div>
                     <NocCountDown />

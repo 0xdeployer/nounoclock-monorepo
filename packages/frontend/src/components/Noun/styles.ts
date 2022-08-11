@@ -7,6 +7,7 @@ export const styles = {
       flex: 1,
       alignSelf: "flex-start",
       width: ["", "60%"],
+      maxWidth: ["", "24.4444%"],
     })
   ),
   img: css({
