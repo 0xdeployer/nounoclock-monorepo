@@ -85,12 +85,14 @@ export const styles = {
       gap: ["10px", "6px"],
     })
   ),
-  info: css({
-    display: "flex",
-    flex: 1,
-    flexDirection: "column",
-    gap: ["10px", "5px"],
-  }),
+  info: css(
+    mq({
+      display: "flex",
+      flex: 1,
+      flexDirection: "column",
+      gap: ["10px", "5px"],
+    })
+  ),
   nogglesWrap: css({
     position: "absolute",
     display: "flex",
@@ -110,11 +112,13 @@ export const styles = {
     },
   }),
 
-  priceWrap: css({
-    display: "flex",
-    flexDirection: "column",
-    width: ["150px", "75px"],
-  }),
+  priceWrap: css(
+    mq({
+      display: "flex",
+      flexDirection: "column",
+      width: ["150px", "75px"],
+    })
+  ),
   priceWrapScale: css({
     fontSize: "14px",
   }),
