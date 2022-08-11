@@ -1,19 +1,22 @@
 import { css } from "@emotion/react";
 import React from "react";
+import { mq } from "../../../utils";
 
 const styles = {
-  base: css({
-    borderRadius: ["4px", "2px"],
-    padding: ["2px 4px", "1px 2px"],
-    gap: "5px",
-    alignItems: "center",
-    justifyContent: "center",
-    fontSize: ["11px", "10px"],
-    textTransform: "uppercase",
-    display: "inline-flex",
-    WebkitFontSmoothing: "subpixel-antialiased",
-    alignSelf: "baseline",
-  }),
+  base: css(
+    mq({
+      borderRadius: ["4px", "2px"],
+      padding: ["2px 4px", "1px 2px"],
+      gap: "5px",
+      alignItems: "center",
+      justifyContent: "center",
+      fontSize: ["11px", "10px"],
+      textTransform: "uppercase",
+      display: "inline-flex",
+      WebkitFontSmoothing: "subpixel-antialiased",
+      alignSelf: "baseline",
+    })
+  ),
   gold: css({
     color: "#E1A900",
     background: "rgba(255, 199, 0, 0.3)",
