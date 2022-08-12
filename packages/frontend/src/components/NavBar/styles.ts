@@ -45,8 +45,12 @@ export const styles = {
     fontSize: "11px",
     minWidth: "40px",
   }),
-  btn: css({
-    display: "inline-flex",
-    width: "auto",
-  }),
+  btn: css(
+    mq({
+      display: "inline-flex",
+      width: "auto",
+      fontSize: ["", "12px"],
+      padding: ["", "10px"],
+    })
+  ),
 };
