@@ -5,7 +5,7 @@ import { styles } from "./styles";
 type Props = {
   children: React.ReactNode;
   disabled?: boolean;
-  onClick?: () => void;
+  onClick?: (evt: any) => void;
   variant?: keyof typeof variants;
   className?: any;
 };

@@ -51,7 +51,7 @@ export const styles = {
       backgroundColor: colors.igloo,
       borderBottom: `1px solid ${colors.jaguar}`,
       paddingBottom: bidItemPadding,
-      height: ["calc(100vh - 242px)", "calc(100vh - 242px)"],
+      height: ["calc(100vh - 242px)", "calc(100vh - 237px)"],
     })
   ),
   bidItemInner: css(

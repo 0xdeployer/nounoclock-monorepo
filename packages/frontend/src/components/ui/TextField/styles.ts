@@ -16,6 +16,7 @@ export const styles = {
     fontSize: "16px",
     "&:focus": {
       outline: "none",
+      border: `1px solid ${colors.alpha}`,
     },
   }),
 };

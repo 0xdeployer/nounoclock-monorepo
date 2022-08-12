@@ -18,12 +18,15 @@ export const styles = {
       display: "flex",
     })
   ),
-  bidFormWrap: css({
-    display: "flex",
-    justifyContent: "center",
-    flex: 1,
-    alignItems: "flex-start",
-  }),
+  bidFormWrap: css(
+    mq({
+      display: "flex",
+      justifyContent: "center",
+      flexDirection: ["row", "column"],
+      flex: 1,
+      alignItems: "flex-start",
+    })
+  ),
   // Applies to noun image container and noun name in nav bar
   nounWrap: css(
     mq({
@@ -55,4 +58,29 @@ export const styles = {
       },
     })
   ),
+  bidModal: css({
+    position: "fixed",
+    width: "calc(100% - 20px)",
+    borderRadius: "4px",
+    height: "auto",
+    display: "flex",
+    flexDirection: "column",
+    top: "50%",
+    left: "50%",
+    transform: "translate(-50%, -50%)",
+    boxSizing: "border-box",
+
+    background: "white",
+    zIndex: 10000,
+  }),
+  bidModalBg: css({
+    position: "fixed",
+    width: "100%",
+    height: "100%",
+    top: 0,
+    content: "' '",
+    left: 0,
+    zIndex: 9999,
+    background: "rgba(0,0,0,0.25)",
+  }),
 };

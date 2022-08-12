@@ -13,7 +13,7 @@ import {
 import { useAuctionCountdown } from "../../hooks";
 import { getBidId } from "../../utils";
 
-export function BidForm() {
+export function BidForm({ children }: { children?: React.ReactNode }) {
   const { isConnected, address } = useAccount();
   const bids = useAppStore((state) => state.bids ?? []);
   const nounId = useAppStore((state) => state.auction?.auction.nounId);
@@ -157,6 +157,7 @@ export function BidForm() {
         <Button css={styles.btn} disabled={!pepareContractWriteEnabled}>
           Place bid
         </Button>
+        {children}
       </form>
     </>
   );
