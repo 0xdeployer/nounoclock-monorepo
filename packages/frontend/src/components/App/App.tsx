@@ -99,7 +99,7 @@ function App() {
               />
             </div>
             {matches["0"] && (
-              <div style={{ padding: "10px 8px" }}>
+              <div css={styles.mobilePlaceBidBtn}>
                 <Button
                   onClick={() => updateShowBidModal(!showBidModal)}
                   variant="bravo"

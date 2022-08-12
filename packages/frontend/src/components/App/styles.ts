@@ -83,4 +83,12 @@ export const styles = {
     zIndex: 9999,
     background: "rgba(0,0,0,0.25)",
   }),
+  mobilePlaceBidBtn: css({
+    padding: "10px 8px",
+    position: "fixed",
+    width: "100%",
+    background: "white",
+    bottom: 0,
+    left: 0,
+  }),
 };
