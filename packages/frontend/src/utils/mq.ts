@@ -1,3 +1,4 @@
+// @ts-ignore
 import facepaint from "facepaint";
 import { useEffect, useState } from "react";
 

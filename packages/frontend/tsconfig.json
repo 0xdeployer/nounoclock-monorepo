@@ -17,5 +17,5 @@
     "jsx": "react-jsx",
     "jsxImportSource": "@emotion/react"
   },
-  "include": ["src", "node_modules/reactions"]
+  "include": ["src", "node_modules/reactions", "index.d.ts"]
 }

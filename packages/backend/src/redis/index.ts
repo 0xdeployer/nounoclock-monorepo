@@ -3,6 +3,10 @@ import { log } from "../utils";
 
 export const client = createClient({
   url: process.env.REDIS_URL,
+  socket: {
+    tls: true,
+    rejectUnauthorized: false,
+  },
 });
 
 client.connect();
