@@ -182,7 +182,6 @@ function App() {
             </div>
           </div>
         </div>
-        <div css={styles.content}></div>
       </div>
     </>
   );
