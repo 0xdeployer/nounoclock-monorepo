@@ -53,9 +53,11 @@ export const styles = {
   hamburger: css({
     width: "22px",
   }),
-  logo: css({
-    width: ["30px", "20px"],
-  }),
+  logo: css(
+    mq({
+      width: ["30px", "20px"],
+    })
+  ),
   timerWrap: css(
     mq({
       display: "flex",
