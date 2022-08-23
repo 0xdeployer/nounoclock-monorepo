@@ -51,8 +51,8 @@ export const styles = {
       overflowY: "scroll",
       backgroundColor: colors.igloo,
       borderBottom: `1px solid ${colors.jaguar}`,
-      paddingBottom: ["12px", "50px"],
-      height: ["calc(100vh - 242px)", "calc(100vh - 217px)"],
+      paddingBottom: "12px",
+      height: ["calc(100vh - 242px)", "calc(100vh - 230px)"],
     })
   ),
   bidItemInner: css(
