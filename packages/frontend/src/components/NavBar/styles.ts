@@ -45,11 +45,9 @@ export const styles = {
       background: colors.charlie,
       display: "flex",
       justifyContent: "space-between",
-      position: "sticky",
       maxWidth: "none",
       borderBottom: `1px solid ${colors.jaguar}`,
       zIndex: 100,
-      top: 0,
     })
   ),
   hamburger: css({

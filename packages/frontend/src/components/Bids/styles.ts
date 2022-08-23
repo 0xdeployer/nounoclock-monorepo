@@ -52,7 +52,7 @@ export const styles = {
       backgroundColor: colors.igloo,
       borderBottom: `1px solid ${colors.jaguar}`,
       paddingBottom: "12px",
-      height: ["calc(100vh - 242px)", "calc(100vh - 230px)"],
+      height: ["calc(100vh - 242px)", `calc(${window.innerHeight}px - 230px)`],
     })
   ),
   bidItemInner: css(
