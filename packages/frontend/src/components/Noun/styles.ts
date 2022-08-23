@@ -5,9 +5,11 @@ export const styles = {
   wrap: css(
     mq({
       flex: 1,
+      display: "flex",
+      alignItems: "flex-end",
       alignSelf: "flex-start",
       width: ["", "60%"],
-      maxWidth: ["", "24.4444%"],
+      maxWidth: ["", "128px"],
     })
   ),
   img: css({

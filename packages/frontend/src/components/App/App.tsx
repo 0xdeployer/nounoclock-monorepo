@@ -1,5 +1,5 @@
 import { css, Global } from "@emotion/react";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useMemo, useRef, useState } from "react";
 
 import { Noun } from "../Noun";
 import { Bids } from "../Bids";
@@ -17,6 +17,8 @@ import { NocCountDown } from "../NocCountdown";
 import { Button } from "../ui/Button";
 
 const backgrounds = ["#EAECF6", "#F5EBE9"];
+// Matches noun BG exactly
+const mobileBg = ["#d5d7e1", "#e1d7d5"];
 
 function App() {
   useConnectWs(socket);
@@ -35,12 +37,20 @@ function App() {
   }, [matches["0"], updateShowBidModal]);
 
   const currentAuction = useAppStore((state) => state.auction);
-
+  const isMobile = matches["0"];
+  const backgroundStyles = useMemo(() => {
+    return isMobile
+      ? {
+          borderBottom: "0",
+          background: currentAuction
+            ? mobileBg[currentAuction.background]
+            : "#FFF",
+        }
+      : void 0;
+  }, [isMobile, currentAuction]);
   if (!currentAuction) {
     return <>LOADING</>;
   }
-
-  console.log(matches);
 
   return (
     <>
@@ -53,31 +63,31 @@ function App() {
           }
         `}
       />
-      <NavBar />
+      <NavBar style={backgroundStyles} />
       <div css={styles.appWrap}>
         <div css={styles.content}>
-          <div css={css(styles.nounWrap, styles.nounWrapExtra)}>
+          <div
+            style={backgroundStyles}
+            css={css(styles.nounWrap, styles.nounWrapExtra)}
+          >
             <Noun
               key={endTime}
               container={nounContainerRef}
               data={currentAuction}
             />
             {matches["0"] && (
-              <div>
-                <div
-                  style={{
-                    display: "flex",
-                    flexDirection: "column",
-                    height: "100%",
-                    justifyContent: "space-between",
-                  }}
-                >
+              <div css={styles.info}>
+                {!matches["0"] && (
                   <div>
+                    {" "}
                     <Timer />
                   </div>
-                  <div>
-                    <NocCountDown />
-                  </div>
+                )}
+                <div css={matches["0"] ? styles.countDown : void 0}>
+                  <NocCountDown
+                    background={currentAuction.background}
+                    simple={matches["0"]}
+                  />
                 </div>
               </div>
             )}

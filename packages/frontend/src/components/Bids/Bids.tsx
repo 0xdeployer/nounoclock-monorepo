@@ -114,10 +114,10 @@ export function Bids({ nounContainer }: BidsProps) {
             },
             ".prev-list-enter-active, .prev-list-enter-done": {
               transition: "transform 300ms ease-out",
-              transform: ["translateY(-150px)", "translateY(-98px)"],
+              transform: ["translateY(-150px)", "translateY(-150px)"],
             },
             ".prev-list-exit, .prev-list-exit-active, .prev-list-exit-done": {
-              transform: ["translateY(-150px)", "translateY(-98px)"],
+              transform: ["translateY(-150px)", "translateY(-150px)"],
             },
           })
         )}

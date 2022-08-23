@@ -16,10 +16,11 @@ export const styles = {
       padding: bidItemPadding,
       paddingBottom: "0",
       boxSizing: "border-box",
-      height: ["150px", "100px"],
+      height: ["150px", "150px"],
+      justifyContent: ["", "center"],
       alignItems: "center",
       flexDirection: "column",
-      minWidth: "350px",
+      minWidth: "300px",
     })
   ),
   bidItemScaled: css({ height: ["100px"] }),
@@ -57,15 +58,16 @@ export const styles = {
   bidItemInner: css(
     mq({
       display: "flex",
-      gap: ["", "5px"],
-      alignItems: "center",
+      gap: ["", "10px"],
+      flexDirection: ["row", "column"],
+      alignItems: ["center", "flex-start"],
       background: colors.charlie,
       borderRadius: "4px",
       border: `1px solid ${colors.jaguar}`,
       width: "100%",
       height: "100%",
       flex: 1,
-      padding: ["10px 40px", "5px"],
+      padding: ["10px 40px", "8px"],
       transition: ".3s background",
       minWidth: "350px",
     })
@@ -91,6 +93,7 @@ export const styles = {
       flex: 1,
       flexDirection: "column",
       gap: ["10px", "5px"],
+      width: ["", "100%"],
     })
   ),
   nogglesWrap: css({
@@ -115,8 +118,10 @@ export const styles = {
   priceWrap: css(
     mq({
       display: "flex",
-      flexDirection: "column",
-      width: ["150px", "75px"],
+      flexDirection: ["column", "row"],
+      alignItems: ["", "baseline"],
+      gap: ["", "10px"],
+      width: ["150px", "100%"],
     })
   ),
   priceWrapScale: css({

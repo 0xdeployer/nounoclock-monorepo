@@ -19,6 +19,22 @@ const twitterButton = css(
 );
 
 export const styles = {
+  btnStyle0: css({
+    border: "1px solid #606370",
+    background: "none",
+    color: "#606370",
+    "& *": {
+      fill: "#606370",
+    },
+  }),
+  btnStyle1: css({
+    border: "1px solid #BA6E5E",
+    background: "none",
+    color: "#BA6E5E",
+    "& *": {
+      fill: "#BA6E5E",
+    },
+  }),
   innerStatusBar: css({
     position: "absolute",
     width: "100%",
@@ -70,6 +86,11 @@ export const styles = {
       marginBottom: "3px",
     })
   ),
+  tagSimple: css({
+    background: "none!important",
+    color: "rgba(0,0,0,70%)",
+    padding: 0,
+  }),
   title: css(
     mq({
       fontWeight: "bold",

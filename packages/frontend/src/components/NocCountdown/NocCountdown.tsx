@@ -1,21 +1,37 @@
 import React from "react";
 import { useAuctionCountdown, useNocStartTime } from "../../hooks";
 import { styles as calendarStyles } from "../Calendar";
-import twitterImg from "../../twitter.svg";
+import { css } from "@emotion/react";
+import { TwitterImg } from "./TwitterImg";
 
-export function NocCountDown() {
+export function NocCountDown({
+  simple,
+  background,
+}: {
+  background?: "0" | "1";
+  simple?: boolean;
+}) {
   // causes re-render
   useAuctionCountdown();
   const { nocActive, nocStartTime, timeLeftToNoc } = useNocStartTime();
+  const showHours = !!timeLeftToNoc?.hours;
+  const showMinutes = !!timeLeftToNoc?.minutes;
+  const showSeconds =
+    (!simple || (simple && !showMinutes)) && !!timeLeftToNoc?.seconds;
   return (
     <>
-      <div css={calendarStyles.tag}>
+      <div
+        css={css(
+          calendarStyles.tag,
+          simple ? calendarStyles.tagSimple : void 0
+        )}
+      >
         {nocActive && "LIVE"}
         {!nocActive && (
           <>
-            In {!!timeLeftToNoc?.hours && `${timeLeftToNoc?.hours}h`}{" "}
-            {!!timeLeftToNoc?.minutes && `${timeLeftToNoc?.minutes}m`}{" "}
-            {!!timeLeftToNoc?.seconds && `${timeLeftToNoc?.seconds}s`}
+            In {showHours && `${timeLeftToNoc?.hours}h`}{" "}
+            {showMinutes && `${timeLeftToNoc?.minutes}m`}{" "}
+            {showSeconds && `${timeLeftToNoc?.seconds}s`}
           </>
         )}
       </div>
@@ -26,10 +42,15 @@ export function NocCountDown() {
       <a
         href="https://twitter.com/noun_o_clock"
         target="_blank"
-        css={calendarStyles.twitterButton}
+        css={css(
+          calendarStyles.twitterButton,
+          simple && background
+            ? calendarStyles[`btnStyle${background}`]
+            : void 0
+        )}
         rel="noreferrer"
       >
-        <img src={twitterImg} /> Listen
+        <TwitterImg /> Listen
       </a>
     </>
   );

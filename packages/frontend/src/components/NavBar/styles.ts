@@ -3,7 +3,43 @@ import { colors, mq } from "../../utils";
 import { styles as appStyles } from "../App/";
 import { type } from "../../utils/type";
 
+const mobileMenu = css({
+  width: "100%",
+  height: "100%",
+  transition: "all 0.3s",
+  opacity: 0,
+  transform: "translateY(10px)",
+  pointerEvents: "none",
+  position: "fixed",
+  zIndex: 1000,
+  background: colors.charlie,
+  display: "flex",
+  padding: "10px",
+  justifyContent: "center",
+  alignItems: "flex-start",
+  paddingTop: "35px",
+});
+
+const close = css({
+  width: "25px",
+  height: "25px",
+  display: "flex",
+  alignItems: "center",
+  justifyContent: "center",
+  borderRadius: "25px",
+  position: "absolute",
+  right: "10px",
+  top: "10px",
+  background: "rgba(0,0,0,55%)",
+  color: colors.charlie,
+  lineHeight: 0,
+  fontSize: "14px",
+  fontFamily: "Comic Sans MS",
+});
+
 export const styles = {
+  mobileMenu,
+  close,
   wrap: css(
     mq({
       background: colors.charlie,
@@ -16,14 +52,19 @@ export const styles = {
       top: 0,
     })
   ),
+  hamburger: css({
+    width: "22px",
+  }),
   logo: css({
-    width: "30px",
+    width: ["30px", "20px"],
   }),
-  timerWrap: css({
-    display: "flex",
-    flexDirection: "column",
-    alignItems: "flex-end",
-  }),
+  timerWrap: css(
+    mq({
+      display: "flex",
+      flexDirection: "column",
+      alignItems: ["flex-end", "center"],
+    })
+  ),
   headerWrap: css({
     display: "flex",
     justifyContent: "space-between",
@@ -31,7 +72,12 @@ export const styles = {
     gap: "10px",
   }),
   btnWrap: css(
-    mq({ display: "flex", alignItem: "center", gap: ["40px", "10px"], flex: 1 })
+    mq({
+      display: "flex",
+      alignItem: "center",
+      gap: ["40px", "10px"],
+      flex: [1, 2],
+    })
   ),
   logoWrap: css({ display: "flex", alignItems: "center", gap: "10px" }),
   watchers: css({
@@ -51,6 +97,7 @@ export const styles = {
       width: "auto",
       fontSize: ["", "12px"],
       padding: ["", "10px"],
+      alignSelf: ["", "flex-start"],
     })
   ),
 };

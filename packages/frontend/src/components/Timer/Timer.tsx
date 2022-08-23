@@ -12,7 +12,7 @@ const styles = {
       display: "flex",
       flexDirection: ["row"],
       flex: 1,
-      alignItems: ["center", "flex-start"],
+      alignItems: ["center", "center"],
       justifyContent: ["flex-end", "center"],
       gap: ["10px", "3px"],
     })
@@ -26,7 +26,7 @@ const styles = {
   ),
 };
 
-export function Timer() {
+export function Timer({ simple }: { simple?: boolean }) {
   const { start, end, pastEndTime } = useAuctionCountdown();
 
   // const [today, todayFormatted] = useMemo(() => {
@@ -44,7 +44,7 @@ export function Timer() {
   return (
     <div css={styles.timerWrap}>
       <>
-        {!pastEndTime && <p css={styles.title}>Auction ends in</p>}
+        {!simple && !pastEndTime && <p css={styles.title}>Auction ends in</p>}
         <Header css={styles.numbers} type="h3">
           {!!hours === true && <>{hours}h</>}{" "}
           {!!minutes === true && <>{minutes ?? 0}m</>}{" "}

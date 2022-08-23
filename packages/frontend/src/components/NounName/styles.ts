@@ -5,7 +5,7 @@ export const styles = {
   nounFont: css(
     mq({
       fontFamily: type.nouns,
-      fontSize: ["", "24px"],
+      fontSize: ["", "18px"],
       WebkitFontSmoothing: "initial",
     })
   ),

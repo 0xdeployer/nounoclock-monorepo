@@ -2,7 +2,25 @@ import { css } from "@emotion/react";
 import { generalWrapper, padding } from "../../styles/layout";
 import { colors, mq, type } from "../../utils";
 
+const info = css({
+  display: "flex",
+  flex: 1,
+  flexDirection: "column",
+  alignItems: "flex-end",
+  height: "100%",
+  justifyContent: "space-between",
+});
+
+const countDown = css({
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "flex-end",
+  paddingRight: "10px",
+});
+
 export const styles = {
+  countDown,
+  info,
   appWrap: css(
     generalWrapper,
     mq({
@@ -33,6 +51,7 @@ export const styles = {
       width: ["32%", "100%"],
       display: ["", "flex"],
       gap: ["", "9px"],
+      flex: ["", "1"],
       paddingRight: ["12px", "8px"],
     })
   ),
@@ -43,6 +62,7 @@ export const styles = {
       paddingBottom: ["100px", "0"],
       paddingTop: ["12px", "0"],
       padding: ["", "0"],
+      alignItems: ["", "center"],
       borderBottom: ["", `1px solid ${colors.jaguar}`],
     })
   ),
