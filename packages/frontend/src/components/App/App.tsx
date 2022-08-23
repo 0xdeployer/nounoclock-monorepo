@@ -15,6 +15,7 @@ import { NounName } from "../NounName";
 import { Timer } from "../Timer";
 import { NocCountDown } from "../NocCountdown";
 import { Button } from "../ui/Button";
+import loadingNoun from "../../loading-noun.gif";
 
 const backgrounds = ["#EAECF6", "#F5EBE9"];
 // Matches noun BG exactly
@@ -48,8 +49,19 @@ function App() {
         }
       : void 0;
   }, [isMobile, currentAuction]);
+
   if (!currentAuction) {
-    return <>LOADING</>;
+    return (
+      <div
+        style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <img alt="Loading" src={loadingNoun} />
+      </div>
+    );
   }
 
   return (
