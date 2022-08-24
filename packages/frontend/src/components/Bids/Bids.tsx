@@ -106,7 +106,7 @@ export function Bids({ nounContainer }: BidsProps) {
               opacity: "1 !important",
               transform: "translateX(0) !important",
               transition: "all 300ms ease-out",
-              "transition-delay": "100ms",
+              transitionDelay: "100ms",
             },
             ".item-exit, .item-exit-active, .item-exit-done": {
               opacity: "1 !important",

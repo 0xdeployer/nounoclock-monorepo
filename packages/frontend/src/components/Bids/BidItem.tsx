@@ -7,6 +7,7 @@ import { Reactions } from "../Reactions";
 import { Avatar, Tag } from "../ui";
 import { Header } from "../ui/Header";
 import { styles } from "./styles";
+import newTab from "../../new-tab.svg";
 
 type BidItemProps = {
   style?: React.CSSProperties;
@@ -20,6 +21,7 @@ export function BidItem({ bid, style, current }: BidItemProps) {
     bid.returnValues.sender,
     bid.returnValues.value
   );
+  console.log(bid);
   const note = useAppStore((state) => state.notes?.[bidId]);
   return (
     <>
@@ -31,12 +33,22 @@ export function BidItem({ bid, style, current }: BidItemProps) {
           css={styles.bidItemInner}
         >
           <div css={styles.priceWrap}>
-            <Header css={styles.price}>
-              <>
-                {"Ξ "}
-                {new BigNumber(bid.returnValues.value).div(10 ** 18).toFixed(2)}
-              </>
-            </Header>
+            <a
+              href={`https://etherscan.io/tx/${bid.transactionHash}`}
+              target="_blank"
+              rel="noreferrer"
+              css={styles.priceLink}
+            >
+              <Header css={styles.price}>
+                <>
+                  {"Ξ "}
+                  {new BigNumber(bid.returnValues.value)
+                    .div(10 ** 18)
+                    .toFixed(2)}
+                </>
+              </Header>
+              <img src={newTab} />
+            </a>
             {bid.pending && <Tag variant="gray">Pending</Tag>}
             {current && <Tag variant="gold">Current Bid</Tag>}
           </div>

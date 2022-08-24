@@ -4,6 +4,16 @@ import { colors, mq } from "../../utils";
 const bidItemPadding = ["12px", "8px"];
 
 export const styles = {
+  priceLink: css({
+    display: "flex",
+    alignItems: "center",
+    textDecoration: "none",
+    color: "inherit",
+    gap: "5px",
+    "& img": {
+      width: "12px",
+    },
+  }),
   infoText: css(
     mq({
       fontSize: ["12px", "11px"],
