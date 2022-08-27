@@ -43,11 +43,14 @@ export const styles = {
   wrap: css(
     mq({
       background: colors.charlie,
+      position: "sticky",
+      top: 0,
       display: "flex",
       justifyContent: "space-between",
       maxWidth: "none",
       borderBottom: `1px solid ${colors.jaguar}`,
       zIndex: 100,
+      padding: "10px 25px",
     })
   ),
   hamburger: css({
@@ -55,7 +58,7 @@ export const styles = {
   }),
   logo: css(
     mq({
-      width: ["30px", "20px"],
+      width: ["25px", "20px"],
     })
   ),
   timerWrap: css(
@@ -88,14 +91,16 @@ export const styles = {
     alignSelf: "center",
     padding: "3px",
     borderRadius: "3px",
-    fontSize: "11px",
+    fontSize: "12px",
+    fontWeight: "600",
     minWidth: "40px",
   }),
   btn: css(
     mq({
       display: "inline-flex",
       width: "auto",
-      fontSize: ["", "12px"],
+      fontSize: "12px",
+      fontWeight: "600",
       padding: ["", "10px"],
       alignSelf: ["", "flex-start"],
     })

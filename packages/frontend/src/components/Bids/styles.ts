@@ -1,5 +1,5 @@
 import { css } from "@emotion/react";
-import { colors, mq } from "../../utils";
+import { colors, mq, type } from "../../utils";
 
 const bidItemPadding = ["12px", "8px"];
 
@@ -42,7 +42,8 @@ export const styles = {
   ),
   note: css(
     mq({
-      fontSize: ["", "16px"],
+      fontSize: ["24px", "16px"],
+      fontFamily: type.nouns,
     })
   ),
   noteScaled: css({

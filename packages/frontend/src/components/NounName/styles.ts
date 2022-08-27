@@ -1,11 +1,19 @@
 import { css } from "@emotion/react";
-import { mq, type } from "../../utils";
+import { colors, mq, type } from "../../utils";
 
 export const styles = {
+  internalPreview: css({
+    fontSize: "12px",
+    color: colors.lambo,
+  }),
+  wrap: css({
+    display: "flex",
+    flexDirection: "column",
+  }),
   nounFont: css(
     mq({
       fontFamily: type.nouns,
-      fontSize: ["", "18px"],
+      fontSize: ["20px", "18px"],
       WebkitFontSmoothing: "initial",
     })
   ),

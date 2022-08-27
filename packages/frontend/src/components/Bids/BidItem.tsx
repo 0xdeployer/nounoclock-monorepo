@@ -71,10 +71,13 @@ export function BidItem({ bid, style, current }: BidItemProps) {
                     .toFixed(2)} in wallet`}
                 </span>
               )}
-              {bid.numberOfNouns && (
-                <span
-                  css={styles.infoText}
-                >{`${bid.numberOfNouns} nouns`}</span>
+              {Number(bid.numberOfNouns) > 0 && (
+                <>
+                  <span css={styles.infoText}>•</span>
+                  <span css={styles.infoText}>{`${bid.numberOfNouns} noun${
+                    Number(bid.numberOfNouns) === 1 ? "" : "s"
+                  }`}</span>
+                </>
               )}
             </div>
             {note && (

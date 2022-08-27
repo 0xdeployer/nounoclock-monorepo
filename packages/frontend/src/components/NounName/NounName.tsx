@@ -7,10 +7,11 @@ export function NounName() {
   const auction = useAppStore((state) => state.auction);
 
   return (
-    <div>
+    <div css={styles.wrap}>
       <Header type="h1" css={styles.nounFont}>
         {auction?.metadata.name}
       </Header>
+      <span css={styles.internalPreview}>Internal preview</span>
     </div>
   );
 }

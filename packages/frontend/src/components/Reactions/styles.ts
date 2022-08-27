@@ -26,6 +26,7 @@ export const styles = {
       display: "flex",
       gap: ["10px", "2px"],
       alignItems: "center",
+      cursor: "pointer",
     })
   ),
   total: css(

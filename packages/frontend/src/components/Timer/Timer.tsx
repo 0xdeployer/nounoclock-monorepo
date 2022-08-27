@@ -17,11 +17,12 @@ const styles = {
       gap: ["10px", "3px"],
     })
   ),
-  numbers: css(mq({ fontSize: ["", "12px"] })),
+  numbers: css(mq({ width: ["80px"], fontWeight: 600, fontSize: "12px" })),
   title: css(
     textGolf,
     mq({
-      fontSize: ["", "12px"],
+      fontSize: "12px",
+      fontWeight: 400,
     })
   ),
 };
