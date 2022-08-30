@@ -5,6 +5,7 @@ export const styles = {
   internalPreview: css({
     fontSize: "12px",
     color: colors.lambo,
+    whiteSpace: "nowrap",
   }),
   wrap: css({
     display: "flex",

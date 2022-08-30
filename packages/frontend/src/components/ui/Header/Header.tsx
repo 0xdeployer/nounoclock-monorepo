@@ -7,6 +7,7 @@ type Props = {
   children?: React.ReactNode;
   className?: any;
   variant?: keyof typeof variants;
+  onClick?: any;
 };
 
 const variants = {
@@ -14,9 +15,10 @@ const variants = {
 };
 
 export function Header(props: Props) {
-  const { variant, type = "h2", className, children } = props;
+  const { onClick, variant, type = "h2", className, children } = props;
   return (
     <span
+      onClick={onClick}
       className={className}
       css={css(styles[type], variant ? variants[variant] : void 0)}
     >

@@ -1,7 +1,7 @@
 import { css } from "@emotion/react";
 import { colors, mq } from "../../utils";
 
-const imgHeight = ["32px", "24px"];
+const imgHeight = ["18px", "18px"];
 
 export const styles = {
   wrap: css(
@@ -17,16 +17,24 @@ export const styles = {
     mq({
       height: imgHeight,
       borderRadius: imgHeight,
-      padding: ["", "3px"],
       width: "auto",
     })
   ),
   imageWrap: css(
     mq({
       display: "flex",
-      gap: ["10px", "2px"],
       alignItems: "center",
       cursor: "pointer",
+      background: colors.jaguar,
+      borderRadius: ["7px", "3px"],
+      boxSizing: ["content-box", "border-box"],
+      padding: ["3px 4px"],
+      "&:hover": {
+        background: colors.mango,
+      },
+      "&:active": {
+        background: "#F5F5F5",
+      },
     })
   ),
   total: css(
@@ -34,6 +42,8 @@ export const styles = {
       fontWeight: "bold",
       color: "rgba(0,0,0,.6)",
       fontSize: ["12px", "10px"],
+      minWidth: "20px",
+      textAlign: "center",
     })
   ),
 };

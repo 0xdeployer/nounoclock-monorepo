@@ -21,14 +21,18 @@ export function BidItem({ bid, style, current }: BidItemProps) {
     bid.returnValues.sender,
     bid.returnValues.value
   );
-  console.log(bid);
+  const isCurrent = !bid.pending && current;
   const note = useAppStore((state) => state.notes?.[bidId]);
   return (
     <>
       <div data-id="biditem" css={styles.bidItem} style={style}>
         <div
           style={{
-            background: current ? "#FFFDE8" : bid.pending ? "#F8F8F8" : void 0,
+            background: isCurrent
+              ? "#FFFDE8"
+              : bid.pending
+              ? "#F8F8F8"
+              : void 0,
           }}
           css={styles.bidItemInner}
         >
@@ -50,7 +54,7 @@ export function BidItem({ bid, style, current }: BidItemProps) {
               <img src={newTab} />
             </a>
             {bid.pending && <Tag variant="gray">Pending</Tag>}
-            {current && <Tag variant="gold">Current Bid</Tag>}
+            {isCurrent && <Tag variant="gold">Current Bid</Tag>}
           </div>
           <div css={styles.info}>
             <div css={styles.social}>

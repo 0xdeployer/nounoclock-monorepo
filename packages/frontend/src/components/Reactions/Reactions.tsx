@@ -78,9 +78,6 @@ export function Reactions(props: ReactionsProps) {
             onClick={(el) => {
               react(props.nounId, props.bidId, reaction.id);
               addFloaty(el.currentTarget, src);
-              try {
-                navigator.vibrate(300);
-              } catch {}
             }}
             css={styles.imageWrap}
           >

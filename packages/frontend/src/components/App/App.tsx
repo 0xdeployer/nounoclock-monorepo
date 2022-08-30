@@ -38,6 +38,7 @@ function App() {
   }, [matches["0"], updateShowBidModal]);
 
   const currentAuction = useAppStore((state) => state.auction);
+  console.log(currentAuction);
   const isMobile = matches["0"];
   const backgroundStyles = useMemo(() => {
     return isMobile

@@ -11,4 +11,5 @@ export const colors = {
   jaguar: "#EEEEEE",
   kangaroo: "#C7C7C7",
   lambo: "#B4B4B4",
+  mango: "#EBEBEB",
 };

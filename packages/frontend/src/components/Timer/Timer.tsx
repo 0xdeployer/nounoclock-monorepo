@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
-import { intervalToDuration } from "date-fns";
-import React, { useMemo } from "react";
+import { intervalToDuration, format } from "date-fns";
+import React, { useCallback, useMemo, useState } from "react";
 import { useAuctionCountdown } from "../../hooks";
 import { textGolf } from "../../styles/text";
 import { mq } from "../../utils";
@@ -9,7 +9,8 @@ import { Header } from "../ui";
 const styles = {
   timerWrap: css(
     mq({
-      display: "flex",
+      cursor: "pointer",
+      display: "inline-flex",
       flexDirection: ["row"],
       flex: 1,
       alignItems: ["center", "center"],
@@ -17,7 +18,8 @@ const styles = {
       gap: ["10px", "3px"],
     })
   ),
-  numbers: css(mq({ width: ["80px"], fontWeight: 600, fontSize: "12px" })),
+  numbers: css(mq({ width: ["100px"], fontWeight: 600, fontSize: "12px" })),
+  showDateEnd: css(mq({ width: ["auto"] })),
   title: css(
     textGolf,
     mq({
@@ -29,27 +31,43 @@ const styles = {
 
 export function Timer({ simple }: { simple?: boolean }) {
   const { start, end, pastEndTime } = useAuctionCountdown();
+  const [showTime, updateShowTime] = useState(false);
 
-  // const [today, todayFormatted] = useMemo(() => {
-  //   const today = new Date();
-  //   return [today, format(new Date(), "PPP")];
-  // }, []);
+  const endToMsDate = new Date(end.times(1000).toNumber());
+
+  const formatted = format(endToMsDate, "MMM dd 'at' h:mm:ss a");
 
   let hours, minutes, seconds;
   if (!pastEndTime) {
     ({ hours, minutes, seconds } = intervalToDuration({
       start: start.times(1000).toNumber(),
-      end: new Date(end.times(1000).toNumber()),
+      end: endToMsDate,
     }));
   }
+
+  const onClick = useCallback(() => {
+    updateShowTime(!showTime);
+  }, [showTime]);
   return (
-    <div css={styles.timerWrap}>
+    <div onClick={onClick} css={styles.timerWrap}>
       <>
-        {!simple && !pastEndTime && <p css={styles.title}>Auction ends in</p>}
-        <Header css={styles.numbers} type="h3">
-          {!!hours === true && <>{hours}h</>}{" "}
-          {!!minutes === true && <>{minutes ?? 0}m</>}{" "}
-          {seconds != null && <>{seconds ?? 0}s</>}
+        {!simple && !pastEndTime && (
+          <p css={styles.title}>Auction ends {showTime ? "on" : "in"}</p>
+        )}
+        <Header
+          css={css(styles.numbers, showTime ? styles.showDateEnd : void 0)}
+          type="h3"
+        >
+          <>
+            {showTime && formatted}
+            {!showTime && (
+              <>
+                {!!hours === true && <>{hours}h</>}{" "}
+                {!!minutes === true && <>{minutes ?? 0}m</>}{" "}
+                {seconds != null && <>{seconds ?? 0}s</>}
+              </>
+            )}
+          </>
         </Header>
       </>
     </div>

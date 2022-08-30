@@ -11,7 +11,7 @@ import {
 // import "./styles.css";
 import { usePrevious } from "../../hooks";
 import emptySvg from "../../empty.svg";
-import { mq, useMq } from "../../utils";
+import { getBidId, mq, useMq } from "../../utils";
 import { css, Global } from "@emotion/react";
 
 type BidsProps = {
@@ -35,14 +35,33 @@ export function Bids({ nounContainer }: BidsProps) {
     }, 0);
   }, [nounContainer]);
 
+  const isSmallScreen = matches["0"];
+
   const currentBid = useMemo(() => {
     return bids?.[bids.length - 1];
   }, [bids]);
-  const prevBids = useMemo(() => {
-    return bids?.slice(0, bids.length - 1);
+  // Bids used in UI that are not current
+  const [prevBids, prevActiveBidId] = useMemo(() => {
+    const prevBids = bids?.slice(0, bids.length - 1);
+    const lastBidArr = prevBids?.filter((bid) => !bid?.pending);
+    const lastBid = lastBidArr?.[(lastBidArr?.length ?? 0) - 1];
+    let bidId = "";
+    if (lastBid) {
+      bidId = getBidId(
+        lastBid.returnValues.nounId,
+        lastBid.returnValues.sender,
+        lastBid.returnValues.value
+      );
+    }
+
+    return [bids?.slice(0, bids.length - 1), bidId];
   }, [bids]);
+  const previousBidLength = usePrevious(bids?.length ?? 0);
   const prevCurrent = usePrevious<Bid | undefined>(currentBid);
   React.useEffect(() => {
+    // The following is used to prevent animation from happening when
+    // pending bids turn final
+    if (bids?.length === previousBidLength) return;
     if (bids && bids.length) {
       if (initialTransform) {
         updateInitialTransform(false);
@@ -57,7 +76,14 @@ export function Bids({ nounContainer }: BidsProps) {
       }, 500);
     }
     // Adding matches to trigger this effect when the breakpoint changes.
-  }, [bids, initialTransform, currentBid, prevCurrent, matches["0"]]);
+  }, [
+    bids,
+    previousBidLength,
+    initialTransform,
+    currentBid,
+    prevCurrent,
+    isSmallScreen,
+  ]);
 
   const prevBidsRef = useRef<HTMLDivElement>(null);
   const currentBidsRef = useRef<HTMLDivElement>(null);
@@ -151,8 +177,14 @@ export function Bids({ nounContainer }: BidsProps) {
                 key={prevBids?.length}
               >
                 {prevBids?.map((bid, i) => {
+                  const currentBidId = getBidId(
+                    bid.returnValues.nounId,
+                    bid.returnValues.sender,
+                    bid.returnValues.value
+                  );
+
                   const current =
-                    currentBid?.pending && i === prevBids.length - 1;
+                    currentBid?.pending && currentBidId === prevActiveBidId;
                   return (
                     <BidItem
                       current={current}
