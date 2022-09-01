@@ -19,6 +19,8 @@ export type GetCurrentAuctionResponseRaw = GetCurrentAuctionResponse & {
   metadata: string;
 };
 
+export type GetNnsResponse = { name: string; address: string }[];
+
 export type GetCurrentAuctionResponse = {
   auction: {
     nounId: string;

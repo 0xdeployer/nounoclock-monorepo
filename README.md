@@ -17,7 +17,7 @@ yarn start:redis
 
 ```
 cd packages/backend
-yarn start
+yarn start:dev
 ```
 
 ### Start front end app

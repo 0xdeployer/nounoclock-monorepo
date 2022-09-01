@@ -3,6 +3,8 @@ import {
   Bid,
   getCurrentAuction,
   GetCurrentAuctionResponse,
+  getNns,
+  GetNnsResponse,
   getNotes,
   postNote,
 } from "../api";
@@ -36,6 +38,7 @@ type State = {
   setEndTime: (endTime: string) => void;
   setBids: (bids: Bid[]) => void;
   addBid: (bid: Bid) => void;
+  setNnsNames: (names: GetNnsResponse) => void;
   getAuctionData: () => Promise<void>;
   postAndSetNote: (
     nounId: string,
@@ -57,6 +60,31 @@ export const useAppStore = create<State>()(
         get().setBids(auction.bids);
         get().setEndTime(auction.auction.endTime);
         set({ auction, reactions, notes, originalEndTime });
+
+        // get NNS data
+        try {
+          const nns = await getNns(auction.bids.map((bid) => bid.address));
+          get().setNnsNames(nns);
+        } catch (e) {
+          console.log(e);
+        }
+      },
+      setNnsNames: (names: GetNnsResponse) => {
+        const state = get();
+        const { bids } = state;
+
+        if (bids) {
+          const newBids = bids.map((bid) => {
+            const found = names.find(
+              (item) => item.address === bid.address.toLowerCase()
+            );
+            if (found?.name) {
+              bid.displayName = found.name;
+            }
+            return bid;
+          });
+          state.setBids(newBids);
+        }
       },
       setWatchers: (num) => set({ watchers: num }),
       setNote: (bidId: string, note: string) => {
@@ -88,7 +116,7 @@ export const useAppStore = create<State>()(
       setBids: (bids: Bid[]) => {
         set({ bids });
       },
-      addBid: (bid: Bid) => {
+      addBid: async (bid: Bid) => {
         const bidId = getBidId(
           bid.returnValues.nounId,
           bid.returnValues.sender,
@@ -107,6 +135,14 @@ export const useAppStore = create<State>()(
         set({
           bids,
         });
+
+        // get NNS data
+        try {
+          const nns = await getNns([bid.address]);
+          get().setNnsNames(nns);
+        } catch (e) {
+          console.log(e);
+        }
       },
       setEndTime: (endTime: string) => {
         set({ endTime });

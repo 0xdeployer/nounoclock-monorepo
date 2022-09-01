@@ -3,3 +3,4 @@ export * from "./types";
 export * from "./postNote";
 export * from "./getReactions";
 export * from "./getNotes";
+export * from "./getNns";

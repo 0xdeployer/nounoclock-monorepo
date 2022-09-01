@@ -119,7 +119,7 @@ export function BidForm({ children }: { children?: React.ReactNode }) {
       <form
         onSubmit={(e) => {
           e.preventDefault();
-          console.log("hi");
+
           try {
             write?.();
             const fn = async () => {
@@ -127,9 +127,7 @@ export function BidForm({ children }: { children?: React.ReactNode }) {
                 try {
                   const msg = `I would like to associate the following note with my bid:\n\n${note}\n\nNoun o Clock Bid ID ${bidId}`;
                   const sig = await signMessageAsync({ message: msg });
-                  console.log("BID ID", bidId);
                   setNoteSignature(bidId, sig, note);
-                  console.log(sig);
                 } catch (e) {
                   console.log(e);
                 }
