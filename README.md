@@ -26,3 +26,13 @@ yarn start:dev
 cd packages/frontend
 yarn start
 ```
+
+## Production Deployment
+
+### Front end
+
+Push to frontend-prod will automatically kick off netlify build
+
+### Back end
+
+Manually deploy master branch from Heroku
