@@ -16,13 +16,19 @@ export const styles = {
   image: css(
     mq({
       height: imgHeight,
-      borderRadius: imgHeight,
+      width: "auto",
+    })
+  ),
+  smiley: css(
+    mq({
+      height: "16px",
       width: "auto",
     })
   ),
   imageWrap: css(
     mq({
       display: "flex",
+      position: "relative",
       alignItems: "center",
       cursor: "pointer",
       background: colors.jaguar,

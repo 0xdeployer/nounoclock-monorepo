@@ -2,7 +2,7 @@ import BigNumber from "bignumber.js";
 import React from "react";
 import { Bid } from "../../api";
 import { useAppStore } from "../../stores";
-import { getBidId, truncateAddress, useMq } from "../../utils";
+import { getBidId, truncateAddress } from "../../utils";
 import { Reactions } from "../Reactions";
 import { Avatar, Tag } from "../ui";
 import { Header } from "../ui/Header";
@@ -13,9 +13,15 @@ type BidItemProps = {
   style?: React.CSSProperties;
   bid: Bid;
   current?: boolean;
+  onClickReactionMenu: (bidId: string) => void;
 };
 
-export function BidItem({ bid, style, current }: BidItemProps) {
+export function BidItem({
+  bid,
+  style,
+  current,
+  onClickReactionMenu,
+}: BidItemProps) {
   const bidId = getBidId(
     bid.returnValues.nounId,
     bid.returnValues.sender,
@@ -89,7 +95,11 @@ export function BidItem({ bid, style, current }: BidItemProps) {
                 {note}
               </Header>
             )}
-            <Reactions nounId={bid.returnValues.nounId} bidId={bidId} />
+            <Reactions
+              onClickReactionMenu={onClickReactionMenu}
+              nounId={bid.returnValues.nounId}
+              bidId={bidId}
+            />
           </div>
         </div>
       </div>
