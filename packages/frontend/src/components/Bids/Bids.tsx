@@ -22,7 +22,6 @@ type BidsProps = {
 };
 
 export function Bids({ nounContainer }: BidsProps) {
-  // const [height, updateHeight] = useState<number | undefined>();
   const bids = useAppStore((state) => state.bids);
   const [translatePrevBids, updateTranslatePrevBids] = useState(false);
   const [translateCurrentBid, updateTranslateCurrentBid] = useState(false);
@@ -31,7 +30,6 @@ export function Bids({ nounContainer }: BidsProps) {
 
   React.useEffect(() => {
     setTimeout(() => {
-      // updateHeight(nounContainer?.current?.offsetHeight);
       updateInitialTransform(true);
     }, 0);
   }, [nounContainer]);

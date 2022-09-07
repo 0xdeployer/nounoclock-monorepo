@@ -175,9 +175,6 @@ export function ReactionMenu({
             return (
               <div
                 key={emoji.u}
-                // ref={(value: HTMLDivElement) => {
-                //   refs.current[reaction.id] = [src, value];
-                // }}
                 onClick={(el) => {
                   if (nounId && bidId) {
                     react(nounId, bidId, emoji.u);

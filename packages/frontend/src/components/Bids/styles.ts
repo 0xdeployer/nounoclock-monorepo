@@ -27,7 +27,6 @@ export const styles = {
       paddingBottom: "0",
       boxSizing: "border-box",
       minHeight: "150px",
-      // height: ["150px", "150px"],
       justifyContent: ["", "center"],
       alignItems: "center",
       flexDirection: "column",
