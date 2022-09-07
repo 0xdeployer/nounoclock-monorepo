@@ -1,5 +1,5 @@
 import BigNumber from "bignumber.js";
-import React from "react";
+import React, { useRef } from "react";
 import { Bid } from "../../api";
 import { useAppStore } from "../../stores";
 import { getBidId, truncateAddress } from "../../utils";
@@ -28,10 +28,12 @@ export function BidItem({
     bid.returnValues.value
   );
   const isCurrent = !bid.pending && current;
-  const note = useAppStore((state) => state.notes?.[bidId]);
+  const note =
+    useAppStore((state) => state.notes?.[bidId]) ?? "HELLO THIS IS A NOTE";
+  const ref = useRef<HTMLDivElement>(null);
   return (
     <>
-      <div data-id="biditem" css={styles.bidItem} style={style}>
+      <div ref={ref} data-id="biditem" css={styles.bidItem} style={style}>
         <div
           style={{
             background: isCurrent

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import one from "reactions/src/images/1.png";
 import two from "reactions/src/images/2.png";
 import three from "reactions/src/images/3.png";
@@ -126,7 +126,9 @@ export function Reactions(props: ReactionsProps) {
       socket.off("reaction", onReaction);
     };
   }, []);
-  console.log(reactions[props.bidId]);
+
+  const reactionArr = Object.entries(reactions?.[props.bidId] ?? {});
+
   return (
     <div css={styles.wrap}>
       <div
@@ -136,37 +138,34 @@ export function Reactions(props: ReactionsProps) {
       >
         <img css={styles.smiley} src={smiley} />
       </div>
-      {reactionsJson
-        .filter((reaction) => {
-          const amount =
-            reactions[props.bidId]?.[reaction.id] ??
-            props.totals?.[reaction.id] ??
-            0;
-          return !!amount;
-        })
-        .map((reaction) => {
-          const src = images[Number(reaction.id) - 1];
-          return (
-            <div
-              key={reaction.id}
-              ref={(value: HTMLDivElement) => {
-                refs.current[reaction.id] = [src, value];
-              }}
-              onClick={(el) => {
-                react(props.nounId, props.bidId, reaction.id);
-                addFloaty(el.currentTarget, src);
-              }}
-              css={styles.imageWrap}
-            >
-              <img css={styles.image} src={images[Number(reaction.id) - 1]} />
-              <span css={styles.total}>
-                {reactions[props.bidId]?.[reaction.id] ??
-                  props.totals?.[reaction.id] ??
-                  0}
-              </span>
-            </div>
-          );
-        })}
+      {reactionArr.map(([reactionId, total]) => {
+        const isNative = isNaN(Number(reactionId));
+        const src = isNative
+          ? `https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/${reactionId}.png`
+          : images[Number(reactionId) - 1];
+
+        return (
+          <div
+            key={reactionId}
+            ref={(value: HTMLDivElement) => {
+              refs.current[reactionId] = [src, value];
+            }}
+            onClick={(el) => {
+              react(props.nounId, props.bidId, reactionId);
+              addFloaty(el.currentTarget, src);
+            }}
+            css={styles.imageWrap}
+          >
+            <img css={styles.image} src={src} />
+
+            <span css={styles.total}>
+              {reactions[props.bidId]?.[reactionId] ??
+                props.totals?.[reactionId] ??
+                0}
+            </span>
+          </div>
+        );
+      })}
     </div>
   );
 }

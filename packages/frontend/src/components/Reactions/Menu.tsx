@@ -1,11 +1,12 @@
 import { css } from "@emotion/react";
-import React, { useRef } from "react";
+import React, { useRef, useState } from "react";
 import { colors, mq } from "../../utils";
 import { styles } from "./styles";
 import reactionsJson from "reactions/src/reactions.json";
-
+import emojis from "./emojis.json";
 import { images } from "./Reactions";
 import { useAppStore } from "../../stores";
+import { CategoriesNav } from "./CategoriesNav";
 
 const wrap = css({
   width: "100%",
@@ -22,6 +23,9 @@ const wrap = css({
   boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.25)",
   transition: "opacity 0.23s",
   padding: "10px",
+  paddingBottom: 0,
+  display: "flex",
+  flexDirection: "column",
 });
 
 const imgCss = css({
@@ -34,6 +38,7 @@ const imageWrap = css({
   display: "flex",
   position: "relative",
   alignItems: "center",
+  justifyContent: "center",
   cursor: "pointer",
   borderRadius: "7px",
   boxSizing: "content-box",
@@ -50,15 +55,27 @@ const imageWrap = css({
 });
 
 const emojiWrap = css({
-  display: "grid",
+  display: "flex",
+  flexWrap: "wrap",
+  alignItems: "center",
+  justifyContent: "center",
   overflow: "scroll",
-  gridTemplateColumns: "repeat(5,1fr)",
-  gap: "10px",
+  gap: "8px",
+  marginTop: "10px",
+  paddingBottom: "10px",
 });
 
-type ReactionMenuBidId = { bidId?: string; resetBidId: () => void };
+type ReactionMenuBidId = {
+  onClick?: () => any;
+  bidId?: string;
+  resetBidId: () => void;
+};
 
-export function ReactionMenu({ bidId, resetBidId }: ReactionMenuBidId) {
+export function ReactionMenu({
+  onClick,
+  bidId,
+  resetBidId,
+}: ReactionMenuBidId) {
   const [visible, updateVisible] = React.useState(false);
   const { react, nounId } = useAppStore((state) => ({
     react: state.react,
@@ -113,6 +130,8 @@ export function ReactionMenu({ bidId, resetBidId }: ReactionMenuBidId) {
     };
   }, [visible]);
 
+  const [chosenCategory, updateChosenCat] = useState("nouns");
+
   return (
     <div
       ref={ref}
@@ -124,26 +143,57 @@ export function ReactionMenu({ bidId, resetBidId }: ReactionMenuBidId) {
       }}
       css={wrap}
     >
+      <CategoriesNav
+        updateChosenCategory={updateChosenCat}
+        chosenCategory={chosenCategory}
+      />
       <div css={emojiWrap}>
-        {reactionsJson.map((reaction) => {
-          return (
-            <div
-              key={reaction.id}
-              // ref={(value: HTMLDivElement) => {
-              //   refs.current[reaction.id] = [src, value];
-              // }}
-              onClick={(el) => {
-                if (nounId && bidId) {
-                  react(nounId, bidId, reaction.id);
-                  resetBidId();
-                }
-              }}
-              css={imageWrap}
-            >
-              <img css={imgCss} src={images[Number(reaction.id) - 1]} />
-            </div>
-          );
-        })}
+        {chosenCategory === "nouns" &&
+          reactionsJson.map((reaction) => {
+            return (
+              <div
+                key={reaction.id}
+                // ref={(value: HTMLDivElement) => {
+                //   refs.current[reaction.id] = [src, value];
+                // }}
+                onClick={(el) => {
+                  if (nounId && bidId) {
+                    react(nounId, bidId, reaction.id);
+                    resetBidId();
+                  }
+                  onClick?.();
+                }}
+                css={imageWrap}
+              >
+                <img css={imgCss} src={images[Number(reaction.id) - 1]} />
+              </div>
+            );
+          })}
+        {chosenCategory !== "nouns" &&
+          // @ts-ignore
+          emojis[chosenCategory].map((emoji) => {
+            return (
+              <div
+                key={emoji.u}
+                // ref={(value: HTMLDivElement) => {
+                //   refs.current[reaction.id] = [src, value];
+                // }}
+                onClick={(el) => {
+                  if (nounId && bidId) {
+                    react(nounId, bidId, emoji.u);
+                    resetBidId();
+                  }
+                  onClick?.();
+                }}
+                css={imageWrap}
+              >
+                <img
+                  css={imgCss}
+                  src={`https://cdn.jsdelivr.net/npm/emoji-datasource-apple/img/apple/64/${emoji.u}.png`}
+                />
+              </div>
+            );
+          })}
       </div>
     </div>
   );

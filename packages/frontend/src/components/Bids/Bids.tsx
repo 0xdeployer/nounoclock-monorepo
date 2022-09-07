@@ -90,6 +90,14 @@ export function Bids({ nounContainer }: BidsProps) {
   const currentBidsRef = useRef<HTMLDivElement>(null);
   const bidsWrapRef = useRef<HTMLDivElement>(null);
   const [trackHeight, updateTrackHeight] = useState<number | undefined>();
+  // Hack to trigger re-render on emoji select
+  // to readjust previous bid transform value
+  const [flip, updateFlip] = useState(false);
+  const onEmojiChange = () => {
+    setTimeout(() => {
+      updateFlip(!flip);
+    }, 0);
+  };
   React.useLayoutEffect(() => {
     const cb = () => {
       let height = 0;
@@ -109,7 +117,7 @@ export function Bids({ nounContainer }: BidsProps) {
     return () => {
       window.removeEventListener("resize", cb);
     };
-  }, [bids]);
+  }, [bids, flip]);
 
   React.useEffect(() => {
     if (trackHeight && bidsWrapRef.current) {
@@ -119,6 +127,24 @@ export function Bids({ nounContainer }: BidsProps) {
       }, 100);
     }
   }, [trackHeight]);
+  const currentBidHeight = currentBidsRef.current?.offsetHeight ?? 150;
+  // const [currentBidHeight, updateCurrentBidHeight] = useState(150);
+  // React.useEffect(() => {
+  //   const onResize = () => {
+  //     const currentBid = currentBidsRef.current?.getBoundingClientRect();
+  //     console.log(currentBid);
+  //     updateCurrentBidHeight(currentBid?.height ?? 150);
+  //   };
+  //   setTimeout(() => {
+  //     onResize();
+  //   }, 1000);
+  //   window.addEventListener("resize", onResize);
+
+  //   return () => {
+  //     window.removeEventListener("resize", onResize);
+  //   };
+  // }, []);
+
   const hasBids = bids && bids.length > 0;
   const [activeReactionBidId, updateActiveReactionBidId] = useState("");
   const onClickReactionMenu = useCallback((bidId: string) => {
@@ -130,7 +156,11 @@ export function Bids({ nounContainer }: BidsProps) {
 
   return (
     <>
-      <ReactionMenu resetBidId={resetBidId} bidId={activeReactionBidId} />
+      <ReactionMenu
+        onClick={onEmojiChange}
+        resetBidId={resetBidId}
+        bidId={activeReactionBidId}
+      />
       <div onScroll={resetBidId} ref={bidsWrapRef} css={styles.bidsWrap}>
         <Global
           styles={css(
@@ -151,10 +181,10 @@ export function Bids({ nounContainer }: BidsProps) {
               },
               ".prev-list-enter-active, .prev-list-enter-done": {
                 transition: "transform 300ms ease-out",
-                transform: ["translateY(-150px)", "translateY(-150px)"],
+                transform: `translateY(-${currentBidHeight}px)`,
               },
               ".prev-list-exit, .prev-list-exit-active, .prev-list-exit-done": {
-                transform: ["translateY(-150px)", "translateY(-150px)"],
+                transform: `translateY(-${currentBidHeight}px)`,
               },
             })
           )}
@@ -183,7 +213,9 @@ export function Bids({ nounContainer }: BidsProps) {
                     position: "absolute",
                     bottom: 0,
                     width: "100%",
-                    transform: initialTransform ? "translateY(-150px)" : void 0,
+                    transform: initialTransform
+                      ? `translateY(-${currentBidHeight}px)`
+                      : void 0,
                   }}
                   key={prevBids?.length}
                 >
