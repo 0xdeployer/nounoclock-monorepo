@@ -28,8 +28,7 @@ export function BidItem({
     bid.returnValues.value
   );
   const isCurrent = !bid.pending && current;
-  const note =
-    useAppStore((state) => state.notes?.[bidId]) ?? "HELLO THIS IS A NOTE";
+  const note = useAppStore((state) => state.notes?.[bidId]);
   const ref = useRef<HTMLDivElement>(null);
   return (
     <>

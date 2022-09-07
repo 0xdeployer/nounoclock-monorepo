@@ -22,7 +22,7 @@ type BidsProps = {
 };
 
 export function Bids({ nounContainer }: BidsProps) {
-  const [height, updateHeight] = useState<number | undefined>();
+  // const [height, updateHeight] = useState<number | undefined>();
   const bids = useAppStore((state) => state.bids);
   const [translatePrevBids, updateTranslatePrevBids] = useState(false);
   const [translateCurrentBid, updateTranslateCurrentBid] = useState(false);
@@ -31,7 +31,7 @@ export function Bids({ nounContainer }: BidsProps) {
 
   React.useEffect(() => {
     setTimeout(() => {
-      updateHeight(nounContainer?.current?.offsetHeight);
+      // updateHeight(nounContainer?.current?.offsetHeight);
       updateInitialTransform(true);
     }, 0);
   }, [nounContainer]);
@@ -59,10 +59,12 @@ export function Bids({ nounContainer }: BidsProps) {
   }, [bids]);
   const previousBidLength = usePrevious(bids?.length ?? 0);
   const prevCurrent = usePrevious<Bid | undefined>(currentBid);
+
   React.useEffect(() => {
     // The following is used to prevent animation from happening when
     // pending bids turn final
     if (bids?.length === previousBidLength) return;
+
     if (bids && bids.length) {
       if (initialTransform) {
         updateInitialTransform(false);
@@ -128,22 +130,6 @@ export function Bids({ nounContainer }: BidsProps) {
     }
   }, [trackHeight]);
   const currentBidHeight = currentBidsRef.current?.offsetHeight ?? 150;
-  // const [currentBidHeight, updateCurrentBidHeight] = useState(150);
-  // React.useEffect(() => {
-  //   const onResize = () => {
-  //     const currentBid = currentBidsRef.current?.getBoundingClientRect();
-  //     console.log(currentBid);
-  //     updateCurrentBidHeight(currentBid?.height ?? 150);
-  //   };
-  //   setTimeout(() => {
-  //     onResize();
-  //   }, 1000);
-  //   window.addEventListener("resize", onResize);
-
-  //   return () => {
-  //     window.removeEventListener("resize", onResize);
-  //   };
-  // }, []);
 
   const hasBids = bids && bids.length > 0;
   const [activeReactionBidId, updateActiveReactionBidId] = useState("");

@@ -15,6 +15,8 @@ export const styles = {
   ),
   image: css(
     mq({
+      minWidth: "18px",
+      minHeight: "18px",
       height: imgHeight,
       width: "auto",
     })
