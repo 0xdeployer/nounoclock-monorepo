@@ -26,7 +26,7 @@ export const styles = {
       padding: bidItemPadding,
       paddingBottom: "0",
       boxSizing: "border-box",
-      height: ["150px", "150px"],
+      minHeight: "150px",
       justifyContent: ["", "center"],
       alignItems: "center",
       flexDirection: "column",

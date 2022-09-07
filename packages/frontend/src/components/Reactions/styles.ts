@@ -7,22 +7,30 @@ export const styles = {
   wrap: css(
     mq({
       display: "flex",
-      gap: ["20px", "5px"],
-      justifyContent: ["", "space-between"],
+      gap: ["5px", "5px"],
+      justifyContent: ["", ""],
       flexWrap: "wrap",
       userSelect: "none",
     })
   ),
   image: css(
     mq({
+      minWidth: "18px",
+      minHeight: "18px",
       height: imgHeight,
-      borderRadius: imgHeight,
+      width: "auto",
+    })
+  ),
+  smiley: css(
+    mq({
+      height: "16px",
       width: "auto",
     })
   ),
   imageWrap: css(
     mq({
       display: "flex",
+      position: "relative",
       alignItems: "center",
       cursor: "pointer",
       background: colors.jaguar,
@@ -41,7 +49,7 @@ export const styles = {
     mq({
       fontWeight: "bold",
       color: "rgba(0,0,0,.6)",
-      fontSize: ["12px", "10px"],
+      fontSize: "10px",
       minWidth: "20px",
       textAlign: "center",
     })

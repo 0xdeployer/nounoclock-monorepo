@@ -1,4 +1,4 @@
-import React, { useMemo, useRef, useState } from "react";
+import React, { useCallback, useMemo, useRef, useState } from "react";
 import { Bid, GetCurrentAuctionResponse } from "../../api";
 import { styles } from "./styles";
 import { useAppStore } from "../../stores";
@@ -13,6 +13,7 @@ import { usePrevious } from "../../hooks";
 import emptySvg from "../../empty.svg";
 import { getBidId, mq, useMq } from "../../utils";
 import { css, Global } from "@emotion/react";
+import { ReactionMenu } from "../Reactions/Menu";
 
 type BidsProps = {
   bids?: GetCurrentAuctionResponse["bids"];
@@ -21,7 +22,6 @@ type BidsProps = {
 };
 
 export function Bids({ nounContainer }: BidsProps) {
-  const [height, updateHeight] = useState<number | undefined>();
   const bids = useAppStore((state) => state.bids);
   const [translatePrevBids, updateTranslatePrevBids] = useState(false);
   const [translateCurrentBid, updateTranslateCurrentBid] = useState(false);
@@ -30,7 +30,6 @@ export function Bids({ nounContainer }: BidsProps) {
 
   React.useEffect(() => {
     setTimeout(() => {
-      updateHeight(nounContainer?.current?.offsetHeight);
       updateInitialTransform(true);
     }, 0);
   }, [nounContainer]);
@@ -58,10 +57,12 @@ export function Bids({ nounContainer }: BidsProps) {
   }, [bids]);
   const previousBidLength = usePrevious(bids?.length ?? 0);
   const prevCurrent = usePrevious<Bid | undefined>(currentBid);
+
   React.useEffect(() => {
     // The following is used to prevent animation from happening when
     // pending bids turn final
     if (bids?.length === previousBidLength) return;
+
     if (bids && bids.length) {
       if (initialTransform) {
         updateInitialTransform(false);
@@ -89,6 +90,14 @@ export function Bids({ nounContainer }: BidsProps) {
   const currentBidsRef = useRef<HTMLDivElement>(null);
   const bidsWrapRef = useRef<HTMLDivElement>(null);
   const [trackHeight, updateTrackHeight] = useState<number | undefined>();
+  // Hack to trigger re-render on emoji select
+  // to readjust previous bid transform value
+  const [flip, updateFlip] = useState(false);
+  const onEmojiChange = () => {
+    setTimeout(() => {
+      updateFlip(!flip);
+    }, 0);
+  };
   React.useLayoutEffect(() => {
     const cb = () => {
       let height = 0;
@@ -108,7 +117,7 @@ export function Bids({ nounContainer }: BidsProps) {
     return () => {
       window.removeEventListener("resize", cb);
     };
-  }, [bids]);
+  }, [bids, flip]);
 
   React.useEffect(() => {
     if (trackHeight && bidsWrapRef.current) {
@@ -118,111 +127,132 @@ export function Bids({ nounContainer }: BidsProps) {
       }, 100);
     }
   }, [trackHeight]);
+  const currentBidHeight = currentBidsRef.current?.offsetHeight ?? 150;
+
   const hasBids = bids && bids.length > 0;
+  const [activeReactionBidId, updateActiveReactionBidId] = useState("");
+  const onClickReactionMenu = useCallback((bidId: string) => {
+    updateActiveReactionBidId(bidId);
+  }, []);
+  const resetBidId = useCallback(() => {
+    updateActiveReactionBidId("");
+  }, []);
+
   return (
-    <div ref={bidsWrapRef} css={styles.bidsWrap}>
-      <Global
-        styles={css(
-          mq({
-            ".item-enter": {
-              opacity: "0 !important",
-              transform: "translateX(100%) !important",
-            },
-            ".item-enter-active, .item-enter-done": {
-              opacity: "1 !important",
-              transform: "translateX(0) !important",
-              transition: "all 300ms ease-out",
-              transitionDelay: "100ms",
-            },
-            ".item-exit, .item-exit-active, .item-exit-done": {
-              opacity: "1 !important",
-              transform: "translateX(0) !important",
-            },
-            ".prev-list-enter-active, .prev-list-enter-done": {
-              transition: "transform 300ms ease-out",
-              transform: ["translateY(-150px)", "translateY(-150px)"],
-            },
-            ".prev-list-exit, .prev-list-exit-active, .prev-list-exit-done": {
-              transform: ["translateY(-150px)", "translateY(-150px)"],
-            },
-          })
-        )}
+    <>
+      <ReactionMenu
+        onClick={onEmojiChange}
+        resetBidId={resetBidId}
+        bidId={activeReactionBidId}
       />
-      <div css={styles.nogglesWrap}>
-        <img src={emptySvg} />
-        {!hasBids && <span>No bids yet</span>}
-      </div>
-      <div
-        css={styles.track}
-        style={{
-          height: trackHeight ? `${trackHeight}px` : "auto",
-          overflow: translatePrevBids ? "hidden" : void 0,
-        }}
-      >
-        {hasBids && (
-          <>
-            <CSSTransition
-              in={translatePrevBids}
-              timeout={300}
-              classNames="prev-list"
-            >
-              <div
-                ref={prevBidsRef}
-                style={{
-                  position: "absolute",
-                  bottom: 0,
-                  width: "100%",
-                  transform: initialTransform ? "translateY(-150px)" : void 0,
-                }}
-                key={prevBids?.length}
-              >
-                {prevBids?.map((bid, i) => {
-                  const currentBidId = getBidId(
-                    bid.returnValues.nounId,
-                    bid.returnValues.sender,
-                    bid.returnValues.value
-                  );
-
-                  const current =
-                    currentBid?.pending && currentBidId === prevActiveBidId;
-                  return (
-                    <BidItem
-                      current={current}
-                      key={`${bid.returnValues.value}-${prevBids?.length}`}
-                      bid={bid}
-                    ></BidItem>
-                  );
-                })}
-              </div>
-            </CSSTransition>
-
-            {currentBid && (
+      <div onScroll={resetBidId} ref={bidsWrapRef} css={styles.bidsWrap}>
+        <Global
+          styles={css(
+            mq({
+              ".item-enter": {
+                opacity: "0 !important",
+                transform: "translateX(100%) !important",
+              },
+              ".item-enter-active, .item-enter-done": {
+                opacity: "1 !important",
+                transform: "translateX(0) !important",
+                transition: "all 300ms ease-out",
+                transitionDelay: "100ms",
+              },
+              ".item-exit, .item-exit-active, .item-exit-done": {
+                opacity: "1 !important",
+                transform: "translateX(0) !important",
+              },
+              ".prev-list-enter-active, .prev-list-enter-done": {
+                transition: "transform 300ms ease-out",
+                transform: `translateY(-${currentBidHeight}px)`,
+              },
+              ".prev-list-exit, .prev-list-exit-active, .prev-list-exit-done": {
+                transform: `translateY(-${currentBidHeight}px)`,
+              },
+            })
+          )}
+        />
+        <div css={styles.nogglesWrap}>
+          <img src={emptySvg} />
+          {!hasBids && <span>No bids yet</span>}
+        </div>
+        <div
+          css={styles.track}
+          style={{
+            height: trackHeight ? `${trackHeight}px` : "auto",
+            overflow: translatePrevBids ? "hidden" : void 0,
+          }}
+        >
+          {hasBids && (
+            <>
               <CSSTransition
-                timeout={400}
-                in={translateCurrentBid}
-                classNames="item"
+                in={translatePrevBids}
+                timeout={300}
+                classNames="prev-list"
               >
                 <div
-                  ref={currentBidsRef}
+                  ref={prevBidsRef}
                   style={{
                     position: "absolute",
                     bottom: 0,
                     width: "100%",
-                    transform: "translateX(100%)",
+                    transform: initialTransform
+                      ? `translateY(-${currentBidHeight}px)`
+                      : void 0,
                   }}
                   key={prevBids?.length}
                 >
-                  <BidItem
-                    current={!currentBid.pending}
-                    key={currentBid.returnValues.value}
-                    bid={currentBid}
-                  ></BidItem>
+                  {prevBids?.map((bid, i) => {
+                    const currentBidId = getBidId(
+                      bid.returnValues.nounId,
+                      bid.returnValues.sender,
+                      bid.returnValues.value
+                    );
+
+                    const current =
+                      currentBid?.pending && currentBidId === prevActiveBidId;
+                    return (
+                      <BidItem
+                        onClickReactionMenu={onClickReactionMenu}
+                        current={current}
+                        key={`${bid.returnValues.value}-${prevBids?.length}`}
+                        bid={bid}
+                      ></BidItem>
+                    );
+                  })}
                 </div>
               </CSSTransition>
-            )}
-          </>
-        )}
+
+              {currentBid && (
+                <CSSTransition
+                  timeout={400}
+                  in={translateCurrentBid}
+                  classNames="item"
+                >
+                  <div
+                    ref={currentBidsRef}
+                    style={{
+                      position: "absolute",
+                      bottom: 0,
+                      width: "100%",
+                      transform: "translateX(100%)",
+                    }}
+                    key={prevBids?.length}
+                  >
+                    <BidItem
+                      onClickReactionMenu={onClickReactionMenu}
+                      current={!currentBid.pending}
+                      key={currentBid.returnValues.value}
+                      bid={currentBid}
+                    ></BidItem>
+                  </div>
+                </CSSTransition>
+              )}
+            </>
+          )}
+        </div>
       </div>
-    </div>
+    </>
   );
 }

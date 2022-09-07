@@ -376,6 +376,10 @@ module.exports = function (webpackEnv) {
               },
             },
             {
+              test: /\.raw\.svg$/,
+              use: "raw-loader",
+            },
+            {
               test: /\.svg$/,
               exclude: /node_modules\/(?!(reactions)\/).*/,
               use: [

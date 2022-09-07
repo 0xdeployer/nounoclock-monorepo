@@ -157,6 +157,7 @@
     "@emotion/babel-plugin": "^11.9.5",
     "@emotion/babel-preset-css-prop": "^11.2.0",
     "@types/react-transition-group": "^4.4.5",
+    "raw-loader": "^4.0.2",
     "webpack-node-externals": "^3.0.0"
   }
 }
