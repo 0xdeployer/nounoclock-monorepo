@@ -29,6 +29,21 @@ import BigNumber from "bignumber.js";
 // }
 export const REDIS_NNS_KEY_PREFIX = "nns";
 
+export async function getNnsNameFromAddress(address: string) {
+  const web3 = getHttpProvider();
+  const res = await web3.eth.call({
+    to: "0x5982ce3554b18a5cf02169049e81ec43bfb73961",
+    data: "0x55ea6c47000000000000000000000000" + address.substring(2),
+  });
+  const offset = new BigNumber(utils.hexDataSlice(res, 0, 32)).toNumber();
+  const length = new BigNumber(
+    utils.hexDataSlice(res, offset, offset + 32)
+  ).toNumber();
+  const data = utils.hexDataSlice(res, offset + 32, offset + 32 + length);
+  const name = utils.toUtf8String(data) || "";
+  return name;
+}
+
 export async function getNns(req: Request, res: Response) {
   try {
     const { addresses } = req.body as {
@@ -46,22 +61,7 @@ export async function getNns(req: Request, res: Response) {
               address: address.toLowerCase(),
             };
           }
-          const res = await web3.eth.call({
-            to: "0x5982ce3554b18a5cf02169049e81ec43bfb73961",
-            data: "0x55ea6c47000000000000000000000000" + address.substring(2),
-          });
-          const offset = new BigNumber(
-            utils.hexDataSlice(res, 0, 32)
-          ).toNumber();
-          const length = new BigNumber(
-            utils.hexDataSlice(res, offset, offset + 32)
-          ).toNumber();
-          const data = utils.hexDataSlice(
-            res,
-            offset + 32,
-            offset + 32 + length
-          );
-          const name = utils.toUtf8String(data) || "";
+          const name = await getNnsNameFromAddress(address);
           await client.set(path, name);
 
           return {

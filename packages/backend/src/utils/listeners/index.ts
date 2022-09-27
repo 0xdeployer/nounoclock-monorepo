@@ -3,15 +3,21 @@ import {
   getBidMetadata,
   getContract,
   getCurrentNounAuction,
+  getEnsInfo,
 } from "../web3";
 import Web3 from "web3";
 import { client } from "../../redis";
 import { sockets } from "../../sockets";
-import { AuctionBidEvent } from "../../types";
+import { AuctionBidEvent, AuctionSettledEvent } from "../../types";
 import { REDIS_CURRENT_AUCTION_KEY } from "../../routes/current-auction";
 import Reaction from "../../database/Reaction";
 import { log } from "../log";
 import Note from "../../database/Note";
+import { draw } from "../drawNoun";
+import { IgApiClient } from "instagram-private-api";
+import { getNnsNameFromAddress } from "../../routes/get-nns";
+import BigNumber from "bignumber.js";
+import { StickerBuilder } from "instagram-private-api/dist/sticker-builder";
 
 let options = {
   clientConfig: {
@@ -47,11 +53,64 @@ provider.on("connect", async () => {
 });
 provider.on("reconnect", flushAll);
 
+export function truncateAddress(address: string) {
+  return `${address.substring(0, 4)}...${address.substring(
+    address.length - 4
+  )}`;
+}
+
+export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
+  try {
+    let { amount, winner } = res.returnValues;
+    const amountStr = new BigNumber(amount.toString()).div(10 ** 18).toFixed(2);
+    const nounId = parseInt(res.returnValues.nounId.toString());
+    const image = await draw(nounId);
+    const imageWithText = await draw(
+      nounId,
+      `New Noun sold for ${amountStr} ETH!`
+    );
+    const ig = new IgApiClient();
+    ig.state.generateDevice(process.env.IG_USERNAME as string);
+    await ig.account.login(
+      process.env.IG_USERNAME as string,
+      process.env.IG_PASSWORD as string
+    );
+
+    let name = truncateAddress(winner);
+
+    try {
+      // try nns
+      name = await getNnsNameFromAddress(winner);
+    } catch {}
+
+    // try ens
+    if (!name) {
+      try {
+        const ens = await getEnsInfo(winner);
+        name = ens?.displayName || winner;
+      } catch {}
+    }
+
+    const caption = `Noun ${nounId} was purchased for ${amountStr} ETH by ${name}! #nouns #nounsdao #nounish`;
+    await ig.publish.photo({
+      file: image,
+      caption,
+    });
+    await ig.publish.story({
+      file: imageWithText,
+    });
+  } catch (e) {
+    log(e);
+  }
+}
+
 export function addWeb3Listeners() {
   const nounAuctionHouseProxy = getContract(
     ContractNames.NounsAuctionHouseProxy,
     web3
   );
+
+  nounAuctionHouseProxy.events.AuctionSettled(auctionSettledCb);
 
   nounAuctionHouseProxy.events.AuctionCreated(async () => {
     console.log("Auction created");

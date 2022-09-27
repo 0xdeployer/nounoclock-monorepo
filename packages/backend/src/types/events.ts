@@ -6,3 +6,11 @@ export type AuctionBidEvent = {
     extended: boolean;
   };
 };
+
+export type AuctionSettledEvent = {
+  returnValues: {
+    nounId: string;
+    winner: string;
+    amount: string;
+  };
+};
