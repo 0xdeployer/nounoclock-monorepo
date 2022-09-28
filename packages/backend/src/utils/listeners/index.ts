@@ -61,13 +61,12 @@ export function truncateAddress(address: string) {
 
 export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
   try {
-    let { amount, winner } = res.returnValues;
+    let { amount } = res.returnValues;
     const amountStr = new BigNumber(amount.toString()).div(10 ** 18).toFixed(2);
     const nounId = parseInt(res.returnValues.nounId.toString());
-    const image = await draw(nounId);
     const imageWithText = await draw(
       nounId,
-      `New Noun sold for ${amountStr} ETH!`
+      `Noun ${nounId} sold for ${amountStr} ETH!`
     );
     const ig = new IgApiClient();
     ig.state.generateDevice(process.env.IG_USERNAME as string);
@@ -76,32 +75,35 @@ export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
       process.env.IG_PASSWORD as string
     );
 
-    let name = truncateAddress(winner);
-
-    try {
-      // try nns
-      name = await getNnsNameFromAddress(winner);
-    } catch {}
-
-    // try ens
-    if (!name) {
-      try {
-        const ens = await getEnsInfo(winner);
-        name = ens?.displayName || winner;
-      } catch {}
-    }
-
-    const caption = `Noun ${nounId} was purchased for ${amountStr} ETH by ${name}! #nouns #nounsdao #nounish`;
-    await ig.publish.photo({
-      file: image,
-      caption,
-    });
     await ig.publish.story({
       file: imageWithText,
     });
   } catch (e) {
     log(e);
   }
+}
+
+export async function auctionCreatedPostToIg(res: {
+  returnValues: { nounId: string };
+}) {
+  const nounId = parseInt(res.returnValues.nounId.toString());
+  const image = await draw(nounId);
+  const imageWithText = await draw(nounId, `Todays Noun: Noun ${nounId}`);
+  const ig = new IgApiClient();
+  ig.state.generateDevice(process.env.IG_USERNAME as string);
+  await ig.account.login(
+    process.env.IG_USERNAME as string,
+    process.env.IG_PASSWORD as string
+  );
+
+  const caption = `Todays Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
+  await ig.publish.photo({
+    file: image,
+    caption,
+  });
+  await ig.publish.story({
+    file: imageWithText,
+  });
 }
 
 export function addWeb3Listeners() {
@@ -112,7 +114,7 @@ export function addWeb3Listeners() {
 
   nounAuctionHouseProxy.events.AuctionSettled(auctionSettledCb);
 
-  nounAuctionHouseProxy.events.AuctionCreated(async () => {
+  nounAuctionHouseProxy.events.AuctionCreated(async (err: any, res: any) => {
     console.log("Auction created");
     const io = sockets();
     io.emit("auctioncreated");
@@ -121,6 +123,9 @@ export function addWeb3Listeners() {
     } catch (e: any) {
       log(e.message);
     }
+    try {
+      await auctionCreatedPostToIg(res);
+    } catch {}
   });
 
   // setTimeout(() => {
