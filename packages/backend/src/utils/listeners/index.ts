@@ -125,7 +125,9 @@ export function addWeb3Listeners() {
     }
     try {
       await auctionCreatedPostToIg(res);
-    } catch {}
+    } catch (e) {
+      log(e);
+    }
   });
 
   // setTimeout(() => {
