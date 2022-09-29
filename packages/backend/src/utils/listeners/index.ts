@@ -96,7 +96,7 @@ export async function auctionCreatedPostToIg(res: {
     process.env.IG_PASSWORD as string
   );
 
-  const caption = `Todays Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
+  const caption = `Today's Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
   await ig.publish.photo({
     file: image,
     caption,
