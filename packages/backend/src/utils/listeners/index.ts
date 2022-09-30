@@ -88,7 +88,7 @@ export async function auctionCreatedPostToIg(res: {
 }) {
   const nounId = parseInt(res.returnValues.nounId.toString());
   const image = await draw(nounId);
-  const imageWithText = await draw(nounId, `Todays Noun: Noun ${nounId}`);
+  const imageWithText = await draw(nounId, `Today's Noun: Noun ${nounId}`);
   const ig = new IgApiClient();
   ig.state.generateDevice(process.env.IG_USERNAME as string);
   await ig.account.login(
