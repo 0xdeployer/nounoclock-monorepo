@@ -59,6 +59,9 @@ export function truncateAddress(address: string) {
   )}`;
 }
 
+const ig = new IgApiClient();
+ig.state.generateDevice(process.env.IG_USERNAME as string);
+
 export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
   try {
     let { amount } = res.returnValues;
@@ -68,8 +71,7 @@ export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
       nounId,
       `Noun ${nounId} sold for ${amountStr} ETH!`
     );
-    const ig = new IgApiClient();
-    ig.state.generateDevice(process.env.IG_USERNAME as string);
+
     await ig.account.login(
       process.env.IG_USERNAME as string,
       process.env.IG_PASSWORD as string
@@ -89,8 +91,6 @@ export async function auctionCreatedPostToIg(res: {
   const nounId = parseInt(res.returnValues.nounId.toString());
   const image = await draw(nounId);
   const imageWithText = await draw(nounId, `Today's Noun: Noun ${nounId}`);
-  const ig = new IgApiClient();
-  ig.state.generateDevice(process.env.IG_USERNAME as string);
   await ig.account.login(
     process.env.IG_USERNAME as string,
     process.env.IG_PASSWORD as string

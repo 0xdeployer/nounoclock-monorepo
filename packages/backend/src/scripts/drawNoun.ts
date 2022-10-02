@@ -41,7 +41,7 @@ async function run() {
   // const image = await draw(375, "New Noun sold for 69.69 ETH!");
   // fs.writeFileSync("noun.ignore.jpg", image);
 
-  await auctionCreatedPostToIg({ returnValues: { nounId: "461" } });
+  await auctionCreatedPostToIg({ returnValues: { nounId: "463" } });
   return;
   // const ig = new IgApiClient();
   // ig.state.generateDevice(process.env.IG_USERNAME as string);
