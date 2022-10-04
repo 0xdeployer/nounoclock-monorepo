@@ -62,8 +62,32 @@ export function truncateAddress(address: string) {
 const ig = new IgApiClient();
 ig.state.generateDevice(process.env.IG_USERNAME as string);
 
+let loggedIn = false;
+
+export async function logIn() {
+  if (loggedIn) return;
+  await ig.account.login(
+    process.env.IG_USERNAME as string,
+    process.env.IG_PASSWORD as string
+  );
+  loggedIn = true;
+}
+
+try {
+  logIn()
+    .then(() => {
+      console.log("Logged in");
+    })
+    .catch((e) => {
+      log(e);
+    });
+} catch (e) {
+  log(e);
+}
+
 export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
   try {
+    console.log("AUCTION SETTLED POST TO IG");
     let { amount } = res.returnValues;
     const amountStr = new BigNumber(amount.toString()).div(10 ** 18).toFixed(2);
     const nounId = parseInt(res.returnValues.nounId.toString());
@@ -72,10 +96,7 @@ export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
       `Noun ${nounId} sold for ${amountStr} ETH!`
     );
 
-    await ig.account.login(
-      process.env.IG_USERNAME as string,
-      process.env.IG_PASSWORD as string
-    );
+    await logIn();
 
     await ig.publish.story({
       file: imageWithText,
@@ -88,13 +109,11 @@ export async function auctionSettledCb(err: any, res: AuctionSettledEvent) {
 export async function auctionCreatedPostToIg(res: {
   returnValues: { nounId: string };
 }) {
+  console.log("AUCTION CREATED POST TO IG");
   const nounId = parseInt(res.returnValues.nounId.toString());
   const image = await draw(nounId);
   const imageWithText = await draw(nounId, `Today's Noun: Noun ${nounId}`);
-  await ig.account.login(
-    process.env.IG_USERNAME as string,
-    process.env.IG_PASSWORD as string
-  );
+  await logIn();
 
   const caption = `Today's Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
   await ig.publish.photo({
