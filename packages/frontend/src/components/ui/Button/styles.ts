@@ -12,7 +12,7 @@ export const styles = {
     color: colors.charlie,
     background: colors.alpha,
     border: "0",
-    borderRadius: "3px",
+    borderRadius: "30px",
     fontSize: "16px",
     width: "100%;",
     borderWidth: "1px",

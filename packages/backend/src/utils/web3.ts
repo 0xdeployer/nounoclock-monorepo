@@ -6,6 +6,9 @@ import NounsDescriptorV2Abi from "../abi/NounsDescriptorV2.json";
 import { AuctionBidEvent } from "../types";
 import fetch from "node-fetch";
 import { log } from "./log";
+import { client } from "../redis";
+import { getNnsNameFromAddress } from "../routes/get-nns";
+import { truncateAddress } from "./listeners";
 
 export enum ContractNames {
   NounsAuctionHouseProxy = "NounsAuctionHouseProxy",
@@ -143,6 +146,34 @@ export async function getEnsInfo(address: string) {
   return fetch(`https://api.ensideas.com/ens/resolve/${address}`).then(
     (res: any) => res.json()
   );
+}
+
+export async function getDisplayNameInfo(address: string) {
+  const key = address.toLowerCase();
+  const cached = await client?.exists(address.toLowerCase());
+  if (cached) {
+    const out = await client.get(key);
+    return JSON.parse(out as string);
+  } else {
+    // check nns
+    let displayName = await getNnsNameFromAddress(address);
+    let avatar = "";
+    if (!displayName) {
+      try {
+        const info = await getEnsInfo(address);
+        if (info.displayName) {
+          displayName = info.displayName;
+          avatar = info.avatar;
+        }
+      } catch {}
+    }
+    if (!displayName) {
+      displayName = truncateAddress(address);
+    }
+    const out = { displayName, timestamp: Date.now(), avatar };
+    await client.set(key, JSON.stringify(out));
+    return out;
+  }
 }
 
 // export async getPendingTransactions() {

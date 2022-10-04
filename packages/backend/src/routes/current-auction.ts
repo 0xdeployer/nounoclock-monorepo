@@ -46,7 +46,6 @@ export async function currentAuction(req: Request, res: Response) {
           blockTimestamp: currentBlockTimestamp.toFixed(),
         });
       } else {
-        console.log("returning cached auction");
         return res.json({
           ...cachedAuction,
           blockTimestamp: currentBlockTimestamp.toFixed(),

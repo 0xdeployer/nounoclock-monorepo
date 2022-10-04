@@ -12,6 +12,7 @@ import {
 } from "wagmi";
 import { useAuctionCountdown } from "../../hooks";
 import { getBidId } from "../../utils";
+import { css } from "@emotion/react";
 
 export function BidForm({ children }: { children?: React.ReactNode }) {
   const { isConnected, address } = useAccount();
@@ -141,20 +142,30 @@ export function BidForm({ children }: { children?: React.ReactNode }) {
         css={styles.wrap}
       >
         <TextField
-          onChange={onBidChange}
-          css={styles.priceInput}
-          value={bidValue}
-          placeholder={`Ξ ${nextBid === "0.00" ? "0.01" : nextBid} or more`}
-        />
-        <TextField
           value={note}
           css={styles.noteInput}
           onChange={onNoteChange}
           placeholder="Add a note"
         />
-        <Button css={styles.btn} disabled={!pepareContractWriteEnabled}>
-          Place bid
-        </Button>
+        <div
+          css={css`
+            display: flex;
+            gap: 10px;
+          `}
+        >
+          <TextField
+            onChange={onBidChange}
+            css={css(styles.priceInput, `flex: 1`)}
+            value={bidValue}
+            placeholder={`Ξ ${nextBid === "0.00" ? "0.01" : nextBid} or more`}
+          />
+          <Button
+            css={css(styles.btn, `min-width: 200px;`)}
+            disabled={!pepareContractWriteEnabled}
+          >
+            Place bid
+          </Button>
+        </div>
         {children}
       </form>
     </>

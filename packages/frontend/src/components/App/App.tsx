@@ -9,13 +9,15 @@ import { BidForm } from "../BidForm";
 import { NavBar } from "../NavBar";
 import { Calendar } from "../Calendar";
 import { styles } from "./styles";
-import { socket, useMq } from "../../utils";
+import { colors, socket, useMq } from "../../utils";
 import { generalWrapper } from "../../styles/layout";
 import { NounName } from "../NounName";
 import { Timer } from "../Timer";
 import { NocCountDown } from "../NocCountdown";
 import { Button } from "../ui/Button";
 import loadingNoun from "../../loading-noun.gif";
+import Chat from "../Chat/Chat";
+import Toggle from "../Toggle/Toggle";
 
 const backgrounds = ["#EAECF6", "#F5EBE9"];
 // Matches noun BG exactly
@@ -35,6 +37,7 @@ function App() {
 
   useEffect(() => {
     updateShowBidModal(false);
+    updateSwitchState("auction");
   }, [matches["0"], updateShowBidModal]);
 
   const currentAuction = useAppStore((state) => state.auction);
@@ -49,6 +52,8 @@ function App() {
         }
       : void 0;
   }, [isMobile, currentAuction]);
+
+  const [switchState, updateSwitchState] = useState("auction");
 
   if (!currentAuction) {
     return (
@@ -69,6 +74,11 @@ function App() {
       <Global
         styles={css`
           body {
+            @media (min-width: 800px) {
+              height: 100vh;
+              overflow: hidden;
+            }
+
             background: ${currentAuction
               ? backgrounds[currentAuction.background]
               : "#FFF"};
@@ -76,7 +86,21 @@ function App() {
         `}
       />
       <NavBar style={backgroundStyles} />
-      <div css={styles.appWrap}>
+      <div style={backgroundStyles} css={styles.appWrap}>
+        {isMobile && (
+          <div
+            css={css`
+              display: flex;
+              justify-content: center;
+              align-items: center;
+            `}
+          >
+            <Toggle
+              value={switchState}
+              onClick={(value: string) => updateSwitchState(value)}
+            />
+          </div>
+        )}
         <div css={styles.content}>
           <div
             style={backgroundStyles}
@@ -113,23 +137,30 @@ function App() {
               paddingBottom: !matches["0"] ? "50px" : 0,
             }}
           >
-            <div style={{ flex: 1, position: "relative" }}>
-              <Bids
-                nounContainer={nounContainerRef}
-                currentBidValue={currentAuction.auction.amount}
-                bids={currentAuction?.bids}
-              />
-            </div>
-            {matches["0"] && (
-              <div css={styles.mobilePlaceBidBtn}>
-                <Button
-                  onClick={() => updateShowBidModal(!showBidModal)}
-                  variant="bravo"
-                >
-                  Place Bid
-                </Button>
-              </div>
+            {switchState === "auction" && (
+              <>
+                <div style={{ flex: 1, position: "relative" }}>
+                  <Bids
+                    nounContainer={nounContainerRef}
+                    currentBidValue={currentAuction.auction.amount}
+                    bids={currentAuction?.bids}
+                  />
+                </div>
+                {matches["0"] && (
+                  <div css={styles.mobilePlaceBidBtn}>
+                    <Button
+                      onClick={() => updateShowBidModal(!showBidModal)}
+                      variant="bravo"
+                    >
+                      Place Bid
+                    </Button>
+                  </div>
+                )}
+              </>
             )}
+
+            {switchState === "chat" && <Chat />}
+
             {matches["0"] && (
               <div
                 style={
@@ -181,6 +212,17 @@ function App() {
               </p>
             </div>
           </div>
+          {!isMobile && (
+            <div
+              css={css`
+                width: 30%;
+                border-left: 1px solid ${colors.jaguar};
+                padding: 10px;
+              `}
+            >
+              <Chat />
+            </div>
+          )}
         </div>
       </div>
     </>

@@ -1,6 +1,8 @@
 import create from "zustand";
 import {
   Bid,
+  Chat,
+  ChatSigData,
   getCurrentAuction,
   GetCurrentAuctionResponse,
   getNns,
@@ -28,6 +30,8 @@ type State = {
   notes?: {
     [bidId: string]: string;
   };
+  chats: Chat[];
+  chatSignatureData?: ChatSigData;
   watchers?: number;
   originalEndTime?: string;
   setWatchers: (num: number) => void;
@@ -37,9 +41,12 @@ type State = {
   react: (noundId: string, bidId: string, reactionId: string) => void;
   setEndTime: (endTime: string) => void;
   setBids: (bids: Bid[]) => void;
+  setChatSignature: (sig: ChatSigData | undefined) => void;
   addBid: (bid: Bid) => void;
   setNnsNames: (names: GetNnsResponse) => void;
   getAuctionData: () => Promise<void>;
+  appendChat: (chat: Chat) => void;
+  sendChat: (message: string) => void;
   postAndSetNote: (
     nounId: string,
     bidId: string,
@@ -50,6 +57,23 @@ type State = {
 export const useAppStore = create<State>()(
   devtools((set, get) => {
     return {
+      chats: [],
+      setChatSignature(data: ChatSigData | undefined) {
+        set({ chatSignatureData: data });
+      },
+      appendChat(chat: Chat) {
+        set({ chats: [...(get().chats ?? []), chat] });
+      },
+      sendChat(message: string) {
+        // timestamp: number;
+        // address: string;
+        // signature: string;
+        // message: string;
+        const chatSignatureData = get().chatSignatureData;
+        const payload = { ...chatSignatureData, message };
+        console.log(payload);
+        socket.emit("chat", payload);
+      },
       async getAuctionData() {
         const auction = await getCurrentAuction();
         const [originalEndTime, notes, reactions] = await Promise.all([

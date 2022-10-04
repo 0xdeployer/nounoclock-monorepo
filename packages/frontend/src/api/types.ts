@@ -19,7 +19,22 @@ export type GetCurrentAuctionResponseRaw = GetCurrentAuctionResponse & {
   metadata: string;
 };
 
+export type Chat = {
+  address: string;
+  avatar: string;
+  message: string;
+  displayName: string;
+  timestamp: string;
+};
+
 export type GetNnsResponse = { name: string; address: string }[];
+
+export type ChatSigData = {
+  timestamp: number;
+  message: string;
+  sig: string;
+  address: string;
+};
 
 export type GetCurrentAuctionResponse = {
   auction: {
@@ -44,6 +59,12 @@ export type ReactionsFromApi = {
   [bidId: string]: {
     [reactionId: string]: number;
   };
+};
+
+export type TimeStampMsg = {
+  timestamp: number;
+  message: string;
+  template: string;
 };
 
 export type Note = string;
