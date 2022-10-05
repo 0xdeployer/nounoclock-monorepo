@@ -18,11 +18,9 @@ export const messagesWrap = css`
   padding-bottom: 10px;
   border-bottom: 1px solid ${colors.jaguar};
   margin-bottom: 20px;
-  flex: 1;
+  height: calc(100vh - 162px);
   overflow: scroll;
-  display: flex;
-  flex-direction: column;
-  justify-content: flex-end;
+  min-height: 0;
 `;
 
 export const date = css`

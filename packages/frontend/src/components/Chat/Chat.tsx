@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { ConnectKitButton } from "connectkit";
-import React, { useCallback, useState } from "react";
+import React, { useCallback, useRef, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { getTimestamp } from "../../api";
 import { useAppStore } from "../../stores";
@@ -48,6 +48,17 @@ export default function Chat() {
     updateMessage("");
   };
 
+  const wrapper = useRef<HTMLDivElement>(null);
+  const messages = useRef<HTMLDivElement>(null);
+  const [scrollPos, updateScrollPos] = useState(0);
+  React.useEffect(() => {
+    if ((wrapper.current?.scrollTop || 0) < scrollPos) return;
+    wrapper.current?.scrollTo(0, messages.current?.offsetHeight ?? 0);
+    setTimeout(() => {
+      updateScrollPos(wrapper.current?.scrollTop ?? 0);
+    }, 100);
+  }, [chats, scrollPos]);
+
   const { isMobile } = useMq();
 
   return (
@@ -67,26 +78,37 @@ export default function Chat() {
             : void 0}
         `}
       >
-        <div css={styles.messagesWrap}>
-          {chats.map((chat) => {
-            return (
-              <div css={styles.messageWrap}>
-                <div
-                  css={css`
-                    display: flex;
-                    gap: 5px;
-                  `}
-                >
-                  <Avatar src={chat.avatar} seed={chat.address} />
-                  <p css={styles.displayName}>{chat.displayName}</p>
-                  <p css={styles.date}>
-                    {format(chat.timestamp as any as number, "p")}
-                  </p>
+        <div ref={wrapper} css={styles.messagesWrap}>
+          <div
+            ref={messages}
+            css={css`
+              flex-direction: column;
+              position: relative;
+              justify-content: flex-end;
+              display: flex;
+              min-height: 100%;
+            `}
+          >
+            {chats.map((chat) => {
+              return (
+                <div css={styles.messageWrap}>
+                  <div
+                    css={css`
+                      display: flex;
+                      gap: 5px;
+                    `}
+                  >
+                    <Avatar src={chat.avatar} seed={chat.address} />
+                    <p css={styles.displayName}>{chat.displayName}</p>
+                    <p css={styles.date}>
+                      {format(chat.timestamp as any as number, "p")}
+                    </p>
+                  </div>
+                  <p css={styles.message}>{chat.message}</p>
                 </div>
-                <p css={styles.message}>{chat.message}</p>
-              </div>
-            );
-          })}
+              );
+            })}
+          </div>
         </div>
 
         <ConnectKitButton.Custom>
