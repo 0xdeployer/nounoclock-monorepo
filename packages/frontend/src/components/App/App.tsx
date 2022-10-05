@@ -159,7 +159,7 @@ function App() {
               </>
             )}
 
-            {switchState === "chat" && <Chat />}
+            {switchState === "chat" && <Chat key={matches[0].toString()} />}
 
             {matches["0"] && (
               <div

@@ -51,13 +51,24 @@ export default function Chat() {
   const wrapper = useRef<HTMLDivElement>(null);
   const messages = useRef<HTMLDivElement>(null);
   const [scrollPos, updateScrollPos] = useState(0);
+  const [initialScroll, updateInitialScroll] = useState(false);
+
   React.useEffect(() => {
+    // Fix issue where you switch from mobile to desktop and it slowly scrolls down
+    setTimeout(() => {
+      wrapper.current?.scrollTo(0, messages.current?.offsetHeight ?? 0);
+      updateInitialScroll(true);
+    }, 0);
+  }, []);
+
+  React.useEffect(() => {
+    if (!initialScroll) return;
     if ((wrapper.current?.scrollTop || 0) < scrollPos) return;
     wrapper.current?.scrollTo(0, messages.current?.offsetHeight ?? 0);
     setTimeout(() => {
       updateScrollPos(wrapper.current?.scrollTop ?? 0);
     }, 100);
-  }, [chats, scrollPos]);
+  }, [chats, scrollPos, initialScroll]);
 
   const { isMobile } = useMq();
 
@@ -78,7 +89,11 @@ export default function Chat() {
             : void 0}
         `}
       >
-        <div ref={wrapper} css={styles.messagesWrap}>
+        <div
+          style={{ scrollBehavior: !initialScroll ? "auto" : "smooth" }}
+          ref={wrapper}
+          css={styles.messagesWrap}
+        >
           <div
             ref={messages}
             css={css`
