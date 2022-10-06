@@ -7,6 +7,7 @@ import { getOriginalEndTime } from "./get-original-endtime";
 import { getReactions } from "./get-reactions";
 import { postNote } from "./post-note";
 import { getStats } from "./stats";
+import { timestamp } from "./timestamp";
 
 export const router = express.Router();
 
@@ -18,3 +19,4 @@ router.get("/notes/:nounId", getNotes);
 router.get("/original-endtime/:nounId", getOriginalEndTime);
 router.post("/blocknative", blockNativeWebhook);
 router.post("/nns", getNns);
+router.get("/timestamp", timestamp);

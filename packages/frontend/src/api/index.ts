@@ -4,3 +4,4 @@ export * from "./postNote";
 export * from "./getReactions";
 export * from "./getNotes";
 export * from "./getNns";
+export * from "./timestamp";

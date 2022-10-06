@@ -23,13 +23,11 @@ const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
 );
 root.render(
-  <React.StrictMode>
-    <WagmiConfig client={client}>
-      <ConnectKitProvider>
-        <App />
-      </ConnectKitProvider>
-    </WagmiConfig>
-  </React.StrictMode>
+  <WagmiConfig client={client}>
+    <ConnectKitProvider>
+      <App />
+    </ConnectKitProvider>
+  </WagmiConfig>
 );
 
 // If you want to start measuring performance in your app, pass a function

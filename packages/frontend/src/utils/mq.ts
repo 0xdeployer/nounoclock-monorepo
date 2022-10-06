@@ -26,5 +26,6 @@ export function useMq() {
 
   return {
     matches,
+    isMobile: matches["0"],
   };
 }
