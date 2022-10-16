@@ -71,6 +71,7 @@ export function CategoriesNav({
           const active = chosenCategory === groups[i];
           return (
             <div
+              key={path}
               onClick={() => updateChosenCategory(groups[i])}
               className={active ? "active" : void 0}
               css={icon}

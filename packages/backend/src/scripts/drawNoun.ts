@@ -4,11 +4,7 @@ import fs from "fs";
 import { IgApiClient } from "instagram-private-api";
 import { StickerBuilder } from "instagram-private-api/dist/sticker-builder";
 import { ContractNames, getContract } from "../utils/web3";
-import {
-  auctionCreatedPostToIg,
-  auctionSettledCb,
-  logIn,
-} from "../utils/listeners";
+import { auctionCreatedPostToIg, auctionSettledCb } from "../utils/listeners";
 
 const testEvent = {
   address: "0x830BD73E4184ceF73443C15111a1DF14e495C706",
@@ -42,9 +38,9 @@ const testEvent = {
 };
 
 async function run() {
-  // const image = await draw(375, "New Noun sold for 69.69 ETH!");
+  // const image = await draw(471);
   // fs.writeFileSync("noun.ignore.jpg", image);
-  await auctionCreatedPostToIg({ returnValues: { nounId: "465" } });
+  await auctionCreatedPostToIg({ returnValues: { nounId: "471" } });
   return;
   // const ig = new IgApiClient();
   // ig.state.generateDevice(process.env.IG_USERNAME as string);

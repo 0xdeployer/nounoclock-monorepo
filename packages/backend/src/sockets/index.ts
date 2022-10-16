@@ -4,6 +4,7 @@ import Reaction from "../database/Reaction";
 import { log } from "../utils";
 import { validate } from "../utils/validate";
 import { getDisplayNameInfo } from "../utils/web3";
+import Chat from "../database/Chat";
 
 let io: Server;
 
@@ -41,13 +42,20 @@ export const sockets = (server?: http.Server) => {
             const { displayName, avatar } = await getDisplayNameInfo(
               params.address
             );
-            io.emit("chat-message", {
+            const timestamp = Date.now();
+            const payload = {
               message,
               displayName,
               address: params?.address?.toLowerCase(),
               avatar,
-              timestamp: Date.now(),
-            });
+              timestamp,
+            };
+            try {
+              await new Chat(payload).save();
+            } catch (e) {
+              log(e);
+            }
+            io.emit("chat-message", payload);
           } else {
             socket.emit("chat-not-valid");
           }

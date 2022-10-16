@@ -28,11 +28,13 @@ function App() {
   const [showBidModal, updateShowBidModal] = useState(false);
   const nounContainerRef = useRef<HTMLDivElement>(null);
   const getAuctionData = useAppStore((state) => state.getAuctionData);
+  const getInitialChats = useAppStore((state) => state.getInitialChats);
   const endTime = useAppStore((store) => store.endTime);
   const { matches } = useMq();
 
   useEffect(() => {
     getAuctionData();
+    getInitialChats();
   }, []);
 
   useEffect(() => {

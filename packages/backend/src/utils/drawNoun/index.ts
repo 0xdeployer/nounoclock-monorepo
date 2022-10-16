@@ -122,7 +122,10 @@ export const buildCanvas = (
   ctx.fillStyle = `#${bgColor}`;
   ctx.fillRect(0, 0, canvas.width, canvas.height);
 
+  console.log(parts);
+
   parts.forEach((part, i) => {
+    if (!part) return;
     const { bounds, rects } = decodeImage(part.data);
     let currentX = bounds.left;
     let currentY = bounds.top;
