@@ -104,9 +104,12 @@ export default function Chat() {
               min-height: 100%;
             `}
           >
-            {chats.map((chat) => {
+            {chats.map((chat, i) => {
               return (
-                <div css={styles.messageWrap}>
+                <div
+                  key={`${i}-${chat.timestamp}-${chat.address}-${chat.displayName}`}
+                  css={styles.messageWrap}
+                >
                   <div
                     css={css`
                       display: flex;
@@ -116,7 +119,7 @@ export default function Chat() {
                     <Avatar src={chat.avatar} seed={chat.address} />
                     <p css={styles.displayName}>{chat.displayName}</p>
                     <p css={styles.date}>
-                      {format(chat.timestamp as any as number, "p")}
+                      {format(new Date(chat.timestamp) as any as number, "p")}
                     </p>
                   </div>
                   <p css={styles.message}>{chat.message}</p>

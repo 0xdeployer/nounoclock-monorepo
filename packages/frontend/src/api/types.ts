@@ -27,6 +27,8 @@ export type Chat = {
   timestamp: string;
 };
 
+export type GetChatsResponse = { chats: Chat[] };
+
 export type GetNnsResponse = { name: string; address: string }[];
 
 export type ChatSigData = {

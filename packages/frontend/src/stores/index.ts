@@ -14,6 +14,7 @@ import { getOriginalEndTime } from "../api/getOriginalEndTime";
 import { getReactions } from "../api/getReactions";
 import { getBidId, socket } from "../utils";
 import { devtools } from "zustand/middleware";
+import { getChats } from "../api/getChats";
 
 type State = {
   auction?: GetCurrentAuctionResponse;
@@ -47,6 +48,7 @@ type State = {
   getAuctionData: () => Promise<void>;
   appendChat: (chat: Chat) => void;
   sendChat: (message: string) => void;
+  getInitialChats: () => Promise<void>;
   postAndSetNote: (
     nounId: string,
     bidId: string,
@@ -61,6 +63,10 @@ export const useAppStore = create<State>()(
       setChatSignature(data: ChatSigData | undefined) {
         set({ chatSignatureData: data });
       },
+      async getInitialChats() {
+        const { chats } = await getChats();
+        set({ chats });
+      },
       appendChat(chat: Chat) {
         set({ chats: [...(get().chats ?? []), chat] });
       },
@@ -71,7 +77,6 @@ export const useAppStore = create<State>()(
         // message: string;
         const chatSignatureData = get().chatSignatureData;
         const payload = { ...chatSignatureData, message };
-        console.log(payload);
         socket.emit("chat", payload);
       },
       async getAuctionData() {
