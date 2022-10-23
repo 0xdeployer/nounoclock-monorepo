@@ -3,3 +3,4 @@ node_modules
 *.rdb
 *.env
 dist
+.DS_Store

@@ -1,6 +1,6 @@
 import { css } from "@emotion/react";
 import { ConnectKitButton } from "connectkit";
-import React, { useCallback, useRef, useState } from "react";
+import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useAccount, useSignMessage } from "wagmi";
 import { getTimestamp } from "../../api";
 import { useAppStore } from "../../stores";
@@ -25,6 +25,15 @@ export default function Chat() {
   const { signMessageAsync } = useSignMessage();
 
   const [message, updateMessage] = useState("");
+
+  useEffect(() => {
+    try {
+      const data = JSON.parse(localStorage.getItem("NOC_CHAT_AUTH") ?? "");
+      if (data) {
+        setChatSignature(data);
+      }
+    } catch {}
+  });
 
   const onClickAuth = useCallback(() => {
     const fn = async () => {
