@@ -11,7 +11,6 @@ export function NounName() {
       <Header type="h1" css={styles.nounFont}>
         {auction?.metadata.name}
       </Header>
-      <span css={styles.internalPreview}>Internal preview</span>
     </div>
   );
 }
