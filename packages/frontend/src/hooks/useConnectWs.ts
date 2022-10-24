@@ -42,6 +42,10 @@ export function useConnectWs(socket: Socket) {
       appendChat(chat);
     };
     const onChatNotValid = () => {
+      console.log("re-auth required");
+      try {
+        localStorage.clearItem("NOC_CHAT_AUTH");
+      } catch {}
       setChatSignature(void 0);
     };
     socket.on("bid", listenForBid);
