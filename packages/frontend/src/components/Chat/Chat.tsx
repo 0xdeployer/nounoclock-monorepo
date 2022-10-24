@@ -33,7 +33,7 @@ export default function Chat() {
         setChatSignature(data);
       }
     } catch {}
-  });
+  }, [setChatSignature]);
 
   const onClickAuth = useCallback(() => {
     const fn = async () => {
