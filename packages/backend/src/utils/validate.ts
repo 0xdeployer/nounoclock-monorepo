@@ -9,12 +9,12 @@ export async function validate(params: {
   const web3 = getHttpProvider();
   const { timestamp, address, sig } = params;
   const now = Date.now();
-  // sig valid only for 24 hours
+  // sig valid for 7 days
   if (timestamp >= now) {
     return false;
   }
 
-  if (now - timestamp > 1000 * 60 * 60 * 24) {
+  if (now - timestamp > 1000 * 60 * 60 * 24 * 7) {
     return false;
   }
   const msg = messageToSign(timestamp);
