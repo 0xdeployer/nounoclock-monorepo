@@ -128,7 +128,7 @@ export default function Chat() {
                     <Avatar src={chat.avatar} seed={chat.address} />
                     <p css={styles.displayName}>{chat.displayName}</p>
                     <p css={styles.date}>
-                      {format(new Date(chat.timestamp) as any as number, "p")}
+                      {format(new Date(chat.timestamp) as any as number, "p MMM d")}
                     </p>
                   </div>
                   <p css={styles.message}>{chat.message}</p>
