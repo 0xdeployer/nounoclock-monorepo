@@ -11,6 +11,25 @@ const info = css({
   justifyContent: "space-between",
 });
 
+export const iframeContainer = css({
+  position: "relative",
+  overflow: "hidden",
+  width: "100%",
+  marginTop: '12px',
+  paddingTop: "56.25%",
+  borderRadius: '4px',
+});
+
+export const iframe = css({
+  position: "absolute",
+  top: 0,
+  left: 0,
+  right: 0,
+  bottom: 0,
+  width: "100%",
+  height: "100%",
+});
+
 const countDown = css({
   display: "flex",
   flexDirection: "column",
@@ -64,6 +83,8 @@ export const styles = {
       padding: ["", "0"],
       alignItems: ["", "center"],
       borderBottom: ["", `1px solid ${colors.jaguar}`],
+      height: ["100vh", ""],
+      overflow: ["scroll", "auto"]
     })
   ),
   mono: css(
