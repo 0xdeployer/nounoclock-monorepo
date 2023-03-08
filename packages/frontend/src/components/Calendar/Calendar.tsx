@@ -49,20 +49,23 @@ export function Calendar() {
       top: "-8px",
       content: (
         <>
-          <p css={styles.title}>Auction ends</p>
           {pastEndTime && (
-            <div>
-              <p>Let's play FOMO and vote for the next Noun together!</p>
-              <a
-                href="https://fomonouns.wtf/"
-                target="_blank"
-                css={styles.playBtn}
-                rel="noreferrer"
-              >
-                <img src={choiceImg} />
-                Play now
-              </a>
-            </div>
+            <>
+              <p css={styles.title}>Auction ended</p>
+
+              <div>
+                <p>Let's play FOMO and vote for the next Noun together!</p>
+                <a
+                  href="https://fomonouns.wtf/"
+                  target="_blank"
+                  css={styles.playBtn}
+                  rel="noreferrer"
+                >
+                  <img src={choiceImg} />
+                  Play now
+                </a>
+              </div>
+            </>
           )}
         </>
       ),
@@ -74,42 +77,10 @@ export function Calendar() {
   return (
     <div css={styles.wrap}>
       <div css={styles.calendarWrap}>
-        <div css={styles.statusBarWrap}>
-          <div
-            css={styles.innerStatusBar}
-            style={{
-              top: `calc(-${100 - progress}% + ${topBuffer - 10}px)`,
-            }}
-          />
-        </div>
         {events.map((event, i) => {
-          const top = getProgress(event.startTime).progress;
           return (
-            <div
-              key={i}
-              style={{
-                position: "absolute",
-                left: 0,
-                top: event.top ? `calc(${top}% + ${event.top})` : `${top}%`,
-              }}
-            >
-              <div
-                style={{
-                  display: "flex",
-                  justifyContent: "center",
-                  alignItems: "flex-start",
-                }}
-              >
-                <div css={styles.circle} />{" "}
-                <div
-                  style={{
-                    position: "relative",
-                    transform: "translateY(-4px)",
-                  }}
-                >
-                  {event.content}
-                </div>
-              </div>
+            <div key={i} style={{ marginBottom: "10px" }}>
+              {event.content}
             </div>
           );
         })}

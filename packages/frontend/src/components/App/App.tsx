@@ -8,7 +8,7 @@ import { useAppStore } from "../../stores";
 import { BidForm } from "../BidForm";
 import { NavBar } from "../NavBar";
 import { Calendar } from "../Calendar";
-import { styles } from "./styles";
+import { iframe, iframeContainer, styles } from "./styles";
 import { colors, socket, useMq } from "../../utils";
 import { generalWrapper } from "../../styles/layout";
 import { NounName } from "../NounName";
@@ -127,6 +127,18 @@ function App() {
                     simple={matches["0"]}
                   />
                 </div>
+              </div>
+            )}
+            {!matches["0"] && (
+              <div css={iframeContainer}>
+                <iframe
+                  css={iframe}
+                  src="https://www.youtube-nocookie.com/embed/oa79nN4gMPs"
+                  title="YouTube video player"
+                  frameBorder="0"
+                  allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                  allowFullScreen
+                ></iframe>
               </div>
             )}
             {!matches["0"] && <Calendar />}
