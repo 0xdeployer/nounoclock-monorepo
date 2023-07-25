@@ -104,11 +104,11 @@ export async function auctionCreatedPostToIg(res: {
     process.env.IG_PASSWORD as string
   );
 
-  const caption = `Today's Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
-  await ig.publish.photo({
-    file: image,
-    caption,
-  });
+  // const caption = `Today's Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
+  // await ig.publish.photo({
+  //   file: image,
+  //   caption,
+  // });
   await ig.publish.story({
     file: imageWithText,
   });
