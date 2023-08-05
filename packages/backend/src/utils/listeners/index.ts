@@ -104,11 +104,11 @@ export async function auctionCreatedPostToIg(res: {
     process.env.IG_PASSWORD as string
   );
 
-  const caption = `Today's Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
-  await ig.publish.photo({
-    file: image,
-    caption,
-  });
+  // const caption = `Today's Noun: Noun ${nounId} #nouns #nounsdao #nounish`;
+  // await ig.publish.photo({
+  //   file: image,
+  //   caption,
+  // });
   await ig.publish.story({
     file: imageWithText,
   });
@@ -120,7 +120,7 @@ export function addWeb3Listeners() {
     web3
   );
 
-  nounAuctionHouseProxy.events.AuctionSettled(auctionSettledCb);
+  // nounAuctionHouseProxy.events.AuctionSettled(auctionSettledCb);
 
   nounAuctionHouseProxy.events.AuctionCreated(async (err: any, res: any) => {
     console.log("Auction created");
@@ -131,11 +131,11 @@ export function addWeb3Listeners() {
     } catch (e: any) {
       log(e.message);
     }
-    try {
-      await auctionCreatedPostToIg(res);
-    } catch (e) {
-      log(e);
-    }
+    // try {
+    //   await auctionCreatedPostToIg(res);
+    // } catch (e) {
+    //   log(e);
+    // }
   });
 
   // setTimeout(() => {
