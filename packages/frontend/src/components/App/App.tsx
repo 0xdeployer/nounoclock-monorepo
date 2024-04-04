@@ -197,7 +197,7 @@ function App() {
               css={matches["0"] ? styles.bidModal : void 0}
             >
               <div css={styles.bidFormWrap}>
-                <BidForm>
+                {/* <BidForm>
                   <>
                     {matches["0"] && (
                       <Button
@@ -211,7 +211,7 @@ function App() {
                       </Button>
                     )}
                   </>
-                </BidForm>
+                </BidForm> */}
               </div>
 
               <p css={styles.mono}>
